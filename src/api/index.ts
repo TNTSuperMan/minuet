@@ -1,6 +1,8 @@
 import app from "../app";
 import { z } from "@hono/zod-openapi";
 
+import "./news";
+
 app.openapi({
     path: "/", method: "get",
     description: "サーバーの基本情報を返します",
