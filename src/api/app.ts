@@ -17,7 +17,7 @@ app.doc("/spec", {
     if(e.status === 404){
       return c.json({
         code: "ResourceNotFound",
-        message: `${c.req.url} does not exist`
+        message: `${new URL(c.req.url).pathname} does not exist`
       }, 404)
     }else return e.getResponse();
   }else{
