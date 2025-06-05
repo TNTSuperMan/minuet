@@ -32,8 +32,8 @@ let dbCache: z.infer<typeof dbSchema> = {
 const dbFile = file(resolve(__dirname, "db.json"));
 try{
   dbCache = dbSchema.parse(await dbFile.json());
-}catch{
-  if(await dbFile.exists()) throw new Error("Failed to load database");
+}catch(cause){
+  if(await dbFile.exists()) throw new Error("Failed to load database", { cause });
   else write(dbFile, JSON.stringify(dbCache))
 }
 
