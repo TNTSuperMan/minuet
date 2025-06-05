@@ -9,6 +9,7 @@
     "hono": "^4.7.5"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/node": "^22.15.29"
   }
 }
