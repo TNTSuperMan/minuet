@@ -2,6 +2,7 @@ import app from "../app";
 import { z } from "@hono/zod-openapi";
 
 import "./news";
+import "./users";
 
 app.openapi({
     path: "/", method: "get",

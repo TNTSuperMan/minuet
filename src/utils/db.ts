@@ -4,11 +4,30 @@ import { resolve } from "path";
 import { newsSchema } from "../api/endpoints/news/types";
 
 export const dbSchema = z.object({
-    news: newsSchema
+    news: newsSchema,
+    users: z.array(z.object({
+        username: z.string(),
+        scratchteam: z.boolean(),
+        history: z.object({
+            joined: z.string().datetime(),
+        }),
+        profile_id: z.number(),
+        images: z.object({
+            "90x90": z.string().url(),
+            "60x60": z.string().url(),
+            "55x55": z.string().url(),
+            "50x50": z.string().url(),
+            "32x32": z.string().url(),
+        }),
+        status: z.string(),
+        bio: z.string(),
+        country: z.string(),
+    })),
 });
 
 let dbCache: z.infer<typeof dbSchema> = {
-    news: []
+    news: [],
+    users: [],
 };
 const dbFile = file(resolve(__dirname, "db.json"));
 try{
