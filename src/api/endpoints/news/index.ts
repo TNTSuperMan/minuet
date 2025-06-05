@@ -1,6 +1,5 @@
 import app from "../../app";
-import { z } from "@hono/zod-openapi";
-import { database } from "../../utils/db";
+import { database } from "../../../utils/db";
 import { newsSchema } from "./types";
 
 app.openapi({

@@ -1,7 +1,7 @@
 import { z } from "@hono/zod-openapi";
 import { file, write } from "bun";
 import { resolve } from "path";
-import { newsSchema } from "../api/news/types";
+import { newsSchema } from "../api/endpoints/news/types";
 
 export const dbSchema = z.object({
     news: newsSchema
