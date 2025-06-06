@@ -37,12 +37,11 @@ app.openapi({
     }
   }
 }, c => {
-  const usrid_low = c.req.param("usr")!;
-  const id = database.users.findIndex(e=>e.username.toLowerCase() == usrid_low);
-  if(id == -1) throw new HTTPException(404);
-  const usrdata = database.users[id];
+  const usrdata = database.users[c.req.param("usr")!.toLowerCase()];
+  if(!usrdata) throw new HTTPException(404);
+  
   return c.json({
-    id,
+    id: usrdata.id,
     username: usrdata.username,
     scratchteam: usrdata.scratchteam,
     history: usrdata.history,

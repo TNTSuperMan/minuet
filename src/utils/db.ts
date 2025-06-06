@@ -5,7 +5,8 @@ import { newsSchema } from "../api/endpoints/news/types";
 
 export const dbSchema = z.object({
   news: newsSchema,
-  users: z.array(z.object({
+  users: z.record(z.object({
+    id: z.number(),
     username: z.string(),
     scratchteam: z.boolean(),
     history: z.object({
@@ -22,12 +23,12 @@ export const dbSchema = z.object({
     status: z.string(),
     bio: z.string(),
     country: z.string(),
-  })),
+  }).optional()),
 });
 
 let dbCache: z.infer<typeof dbSchema> = {
   news: [],
-  users: [],
+  users: {},
 };
 const dbFile = file(resolve(__dirname, "db.json"));
 try{
