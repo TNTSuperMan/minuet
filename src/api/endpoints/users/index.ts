@@ -1,6 +1,6 @@
-import { z } from "@hono/zod-openapi"
-import app from "../../app"
-import { database } from "../../../utils/db"
+import { z } from "@hono/zod-openapi";
+import app from "../../app";
+import { database } from "../../../utils/db";
 import { HTTPException } from "hono/http-exception";
 
 app.openapi({
@@ -39,7 +39,7 @@ app.openapi({
 }, c => {
   const usrdata = database.users[c.req.param("usr")!.toLowerCase()];
   if(!usrdata) throw new HTTPException(404);
-  
+
   return c.json({
     id: usrdata.id,
     username: usrdata.username,
