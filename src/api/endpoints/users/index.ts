@@ -1,5 +1,4 @@
 import app from "../../app";
-import { database } from "../../../utils/db";
 import { HTTPException } from "hono/http-exception";
 import { getUser, userSchema } from "../../utils/user";
 

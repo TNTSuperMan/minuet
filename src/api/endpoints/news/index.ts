@@ -15,4 +15,4 @@ app.openapi({
             }
         }
     }
-}, c => c.json(database.news));
+}, c => c.json(newsSchema.parse(database.query("SELECT * FROM news").all())));
