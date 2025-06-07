@@ -19,7 +19,6 @@ app.notFound(async c=>{
     return new Response(f);
   else{
     const route = routesMap.find(e=>e[0].test(c.req.path));
-    console.log(route)
     if(!route) throw new HTTPException(404);
     else return typeof route[1] === "string" ? c.redirect(route[1]) : new Response(route[1])
   }
