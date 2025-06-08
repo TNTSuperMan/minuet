@@ -19,10 +19,10 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE COLLATE NOCASE NOT NULL,
   scratchteam INTEGER NOT NULL,
-  joined TEXT NOT NULL,
+  joined  TEXT NOT NULL,
   profile_id INTEGER NOT NULL,
-  status TEXT NOT NULL,
-  bio TEXT NOT NULL,
+  status  TEXT NOT NULL,
+  bio     TEXT NOT NULL,
   country TEXT NOT NULL
 )`);
 export const DBUserSchema = z.object({
