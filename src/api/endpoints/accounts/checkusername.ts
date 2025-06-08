@@ -37,7 +37,7 @@ app.openapi({
     msg: "bad username" as const,
     username
   });
-  else if(Object.hasOwn(database.users, lowername)) return c.json({
+  else if(database.query(`SELECT * FROM users WHERE name = ?`).all(username).length, lowername) return c.json({
     msg: "username exists" as const,
     username
   });
