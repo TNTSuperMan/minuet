@@ -9,4 +9,4 @@ ScratchのAPIをbun+honoで作りたい
 $ bun dev
 ```
 apiサーバーは[http://localhost:4519](http://localhost:4519)で動きます
-webサーバーは[http://localhost:4517](http://localhost:4517)で動く予定です
+webサーバーは[http://localhost:4517](http://localhost:4517)です
