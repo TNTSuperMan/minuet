@@ -6,8 +6,13 @@ const username_regex = /^[\da-zA-Z-_]{3,}$/;
 const bad_regex = /(google|ggr|goog|gtm|youtube|gemini)/;
 
 app.openapi({
-  path: "/accounts/checkusername/:usr/", method: "get",
+  path: "/accounts/checkusername/{usr}/", method: "get",
   description: "新規ユーザー名として有効かどうかを返します",
+  request: {
+    params: z.object({
+      usr: z.string().describe("ユーザー名")
+    })
+  },
   responses: {
     200: {
       description: "返ってきたよ",
@@ -37,7 +42,7 @@ app.openapi({
     msg: "bad username" as const,
     username
   });
-  else if(database.query(`SELECT * FROM users WHERE name = ?`).all(username).length, lowername) return c.json({
+  else if(database.query(`SELECT * FROM users WHERE name = ?`).all(username).length) return c.json({
     msg: "username exists" as const,
     username
   });
