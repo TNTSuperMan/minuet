@@ -1,5 +1,6 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 
 const app = new OpenAPIHono({ strict: false });
@@ -30,5 +31,13 @@ app.doc("/spec", {
 }).notFound(()=>{
   throw new HTTPException(404);
 });
+app.use(cors({
+  origin: "http://localhost:4517",
+  allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+  allowMethods: ['POST', 'GET', 'OPTIONS'],
+  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+  maxAge: 600,
+  credentials: true,
+}))
 
 export default app
