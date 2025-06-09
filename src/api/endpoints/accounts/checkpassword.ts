@@ -31,7 +31,7 @@ app.openapi({
     }
   }
 }, async c => {
-  const { password } = await c.req.json() as { password: string };
+  const { password } = c.req.valid("json");
   if(password.length < 6 || // パスワードの長さ判定
     password.toLowerCase() == "password" || // passwordの大文字小文字の判定
     password ===  "123456789".substring(0, password.length) || // 123...のような文字の判定

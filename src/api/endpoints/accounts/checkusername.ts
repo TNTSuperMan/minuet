@@ -32,7 +32,7 @@ app.openapi({
     }
   }
 }, c => {
-  const username = c.req.param("usr")!;
+  const username = c.req.valid("param").usr;
   const lowername = username.toLowerCase();
   if(!username_regex.test(lowername)) return c.json({
     msg: "invalid username" as const,

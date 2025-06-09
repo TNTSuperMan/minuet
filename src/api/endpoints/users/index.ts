@@ -22,7 +22,7 @@ app.openapi({
     }
   }
 }, c => {
-  const user = getUser(c.req.param("usr")!);
+  const user = getUser(c.req.valid("param").usr);
   if(!user) throw new HTTPException(404);
   else return c.json(user);
 })
