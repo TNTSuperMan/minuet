@@ -3,7 +3,7 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 import { HTTPException } from "hono/http-exception";
 
-const app = new OpenAPIHono({ strict: false });
+const app = new OpenAPIHono;
 
 app.doc("/spec", {
   openapi: "3.0.0",
