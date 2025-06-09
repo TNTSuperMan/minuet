@@ -18,7 +18,6 @@ database.exec(`CREATE TABLE IF NOT EXISTS news (
 database.exec(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE COLLATE NOCASE NOT NULL,
-  profile_id  INTEGER NOT NULL,
   birth_month INTEGER NOT NULL,
   birth_year  INTEGER NOT NULL,
   scratchteam INTEGER NOT NULL,
@@ -33,7 +32,6 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
 export const DBUserSchema = z.object({
   id: z.number(),
   name: z.string(),
-  profile_id: z.number(),
   birth_month: z.number(),
   birth_year: z.string(),
   scratchteam: z.number(),
