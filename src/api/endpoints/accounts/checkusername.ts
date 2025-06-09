@@ -5,6 +5,17 @@ import { z } from "@hono/zod-openapi";
 const username_regex = /^[\da-zA-Z-_]{3,}$/;
 const bad_regex = /(google|ggr|goog|gtm|youtube|gemini)/;
 
+export const validateUsername = (username: string): "invalid username" | "bad username" | "username exists" | "valid username" => {
+  const lowername = username.toLowerCase();
+  if(!username_regex.test(lowername))
+    return "invalid username";
+  else if(bad_regex.test(lowername))
+    return "bad username"
+  else if(database.query(`SELECT * FROM users WHERE name = ?`).all(username).length)
+    return "username exists";
+  else return "valid username";
+}
+
 app.openapi({
   path: "/accounts/checkusername/{usr}/", method: "get",
   description: "新規ユーザー名として有効かどうかを返します",
@@ -33,21 +44,8 @@ app.openapi({
   }
 }, c => {
   const username = c.req.valid("param").usr;
-  const lowername = username.toLowerCase();
-  if(!username_regex.test(lowername)) return c.json({
-    msg: "invalid username" as const,
+  return c.json({
+    msg: validateUsername(username),
     username
-  });
-  else if(bad_regex.test(lowername)) return c.json({
-    msg: "bad username" as const,
-    username
-  });
-  else if(database.query(`SELECT * FROM users WHERE name = ?`).all(username).length) return c.json({
-    msg: "username exists" as const,
-    username
-  });
-  else return c.json({
-    msg: "valid username" as const,
-    username
-  });
+  })
 })
