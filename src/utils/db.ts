@@ -33,7 +33,7 @@ export const DBUserSchema = z.object({
   id: z.number(),
   name: z.string(),
   birth_month: z.number(),
-  birth_year: z.string(),
+  birth_year: z.number(),
   scratchteam: z.number(),
   email: z.string().email(),
   password: z.string(),
