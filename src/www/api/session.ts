@@ -2,7 +2,7 @@ import app from "../app";
 import { z } from "@hono/zod-openapi";
 
 app.openapi({
-  path: "/session", method: "get",
+  path: "/session/", method: "get",
   description: "セッション情報(正直CSRFむずかちい)",
   responses: {
     200: {
