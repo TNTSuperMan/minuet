@@ -33,7 +33,7 @@ app.doc("/spec", {
 });
 app.use(cors({
   origin: "http://localhost:4517",
-  allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
+  allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type'],
   allowMethods: ['POST', 'GET', 'OPTIONS'],
   exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
   maxAge: 600,
