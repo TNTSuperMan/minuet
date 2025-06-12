@@ -63,40 +63,8 @@ app.openapi({
   }
 }, c=>c.json({
   flags: {
-    confirm_email_banner: true,
-    everything_is_totally_normal: true,
     gallery_comments_enabled: false,
-    has_outstanding_email_confirmation: false,
-    must_complete_registration: false,
-    must_reset_password: false,
     project_comments_enabled: true,
-    show_welcome: true,
-    unsupported_browser_banner: true,
     userprofile_comments_enabled: false,
-    with_parent_email: true,
   },
-  permissions: {
-    admin: true,
-    educator: true,
-    educator_invitee: true,
-    invited_scratcher: true,
-    mute_status: {},
-    new_scratcher: true,
-    scratcher: false,
-    social: false,
-    student: true,
-  },
-  user: {
-    banned: false,
-    birthMonth: 19,
-    birthYear: 1919,
-    dateJoined: "2038-1-19T12:12:12",
-    email: "info@example.com",
-    gender: "X",
-    id: 114514,
-    should_vpn: false,
-    thumbnailUrl: "https://tntsuperman.pages.dev/tnt.jpg",
-    token: "11451419198104545",
-    username: "TNTSuperMan"
-  }
 }))
