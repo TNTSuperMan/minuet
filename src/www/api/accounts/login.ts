@@ -1,7 +1,9 @@
 import { password } from "bun";
 import { database, DBUserSchema } from "../../../utils/db";
-import app from "../../app";
+import app, { secret } from "../../app";
 import { z } from "@hono/zod-openapi";
+import { verify } from "hono/jwt";
+import { deleteCookie } from "hono/cookie";
 
 app.openapi({
   path: "/accounts/login/", method: "post",
@@ -17,7 +19,10 @@ app.openapi({
           })
         }
       }
-    }
+    },
+    headers: z.object({
+      "X-csrftoken": z.string().describe("/csrf_token/のCookieで取得したCSRFトークン")
+    })
   },
   responses: {
     200: {
@@ -35,10 +40,24 @@ app.openapi({
           }))
         }
       }
+    },
+    403: {
+      description: "CSRF検証の失敗",
+      "text/plain": {
+        schema: z.string().describe("「CSRF検証に失敗しました」というメッセージ")
+      }
     }
   }
 }, async c => {
   const { username, password: pass } = c.req.valid("json");
+  const headers = c.req.valid("header");
+  try{
+    await verify(headers["X-csrftoken"], secret);
+  }catch{
+    deleteCookie(c, "scratchcsrftoken");
+    return c.text("CSRF検証に失敗しました", 403)
+  }
+
   const qres = database.query("SELECT * FROM users WHERE name = ?").all(username);
   if(!qres.length) return c.json([{
     username,
