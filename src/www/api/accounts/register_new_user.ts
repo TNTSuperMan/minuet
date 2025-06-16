@@ -1,10 +1,11 @@
 import { HTTPException } from "hono/http-exception";
 import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
-import app from "../../app";
+import app, { secret } from "../../app";
 import { z } from "@hono/zod-openapi";
 import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { database } from "../../../utils/db";
 import { password } from "bun";
+import { sign } from "hono/jwt";
 
 const formdataSchema = z.object({
   username: z.string(),
@@ -38,14 +39,14 @@ app.openapi({
       description: "おｋ",
       content: {
         "application/json": {
-          schema: z.object({
+          schema: z.array(z.object({
             username: z.string().describe("登録したユーザー名"),
-            user_id: z.string().describe("割り当てられたユーザーID"),
+            user_id: z.number().describe("割り当てられたユーザーID"),
             success: z.boolean().describe("成功したか"),
             token: z.string().optional().describe("アクセストークン"),
             msg: z.string().describe("メッセージ(正常の場合\"user created\")"),
             logged_in: z.boolean().describe("そのユーザーにログインしたか(wwwで使われてない気がする)"),
-          })
+          }))
         }
       }
     }
@@ -72,12 +73,15 @@ app.openapi({
     "", "", body.country
   ))
 
-  return c.json({
+  return c.json([{
     username: body.username,
-    user_id: id.toString(),
+    user_id: id,
     success: true,
-    token: "just a moment...",
+    token: await sign({
+      username: body.username,
+      exp: Math.floor(Date.now() / 1000) + (14*24*60*60)
+    }, secret),
     msg: "user created",
-    logged_in: false
-  })
+    logged_in: true
+  }])
 })
