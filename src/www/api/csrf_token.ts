@@ -19,6 +19,6 @@ app.openapi({
 }, async c => {
   setCookie(c, "scratchcsrftoken", await sign({
     exp: Math.floor(Date.now() / 1000) + (365*24*60*60)
-  }, secret));
+  }, secret, "EdDSA"));
   return c.text("");
 })

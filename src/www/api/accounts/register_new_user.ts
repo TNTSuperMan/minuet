@@ -80,7 +80,7 @@ app.openapi({
     token: await sign({
       username: body.username,
       exp: Math.floor(Date.now() / 1000) + (14*24*60*60)
-    }, secret),
+    }, secret, "EdDSA"),
     msg: "user created",
     logged_in: true
   }])
