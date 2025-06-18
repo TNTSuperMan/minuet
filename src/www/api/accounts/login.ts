@@ -1,9 +1,10 @@
 import { password } from "bun";
 import { database, DBUserSchema } from "../../../utils/db";
-import app, { secret } from "../../app";
+import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { verify } from "hono/jwt";
 import { deleteCookie } from "hono/cookie";
+import { secret } from "../../../utils/secret";
 
 app.openapi({
   path: "/accounts/login/", method: "post",

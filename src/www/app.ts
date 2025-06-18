@@ -1,7 +1,6 @@
 import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { HTTPException } from "hono/http-exception";
-import crypto from "crypto";
 
 const app = new OpenAPIHono;
 
@@ -28,7 +27,5 @@ app.onError((e,c)=>{
     })
   }
 });
-
-export const secret = crypto.randomBytes(256).toString("ascii");
 
 export default app

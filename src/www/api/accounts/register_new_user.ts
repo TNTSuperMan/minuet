@@ -1,11 +1,12 @@
 import { HTTPException } from "hono/http-exception";
 import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
-import app, { secret } from "../../app";
+import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { database } from "../../../utils/db";
 import { password } from "bun";
 import { sign } from "hono/jwt";
+import { secret } from "../../../utils/secret";
 
 const formdataSchema = z.object({
   username: z.string(),
