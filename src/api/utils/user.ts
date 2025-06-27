@@ -30,13 +30,13 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
 
   return {
     id: usrdata.id,
-    username: usrdata.username,
-    scratchteam: usrdata.scratchteam,
+    username: usrdata.name,
+    scratchteam: usrdata.scratchteam != 0,
     history: {
       joined: usrdata.joined
     },
     profile: {
-      id: usrdata.profile_id,
+      id: usrdata.id,
       images: { // まだだお
         "90x90": "https://example.com",
         "60x60": "https://example.com",
