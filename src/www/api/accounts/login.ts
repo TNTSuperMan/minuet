@@ -55,7 +55,13 @@ app.openapi({
     await verify(headers["X-csrftoken"], key.publicKey, "EdDSA");
   }catch{
     deleteCookie(c, "scratchcsrftoken");
-    return c.text("CSRF検証に失敗しました", 403)
+    return c.json([{
+      username,
+      messages: [],
+      num_tries: 0,
+      success: 0,
+      msg: "CSRF検証に失敗しました",
+    }])
   }
 
   const loginResult = await login(c, username, password);
