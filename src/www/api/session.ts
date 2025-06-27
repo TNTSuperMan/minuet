@@ -79,7 +79,7 @@ app.openapi({
 }, async c=>{
   const cookie = getCookie(c, "scratchsessionid");
   if(!cookie) return c.json(failed_response);
-  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey).catch(()=>null));
+  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
   if(!payload.success) return c.json(failed_response);
 
   const users = database.query("SELECT * FROM users WHERE name = ?").all(payload.data.aud);
