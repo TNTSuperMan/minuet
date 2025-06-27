@@ -1,10 +1,9 @@
-import { password } from "bun";
-import { database, DBUserSchema } from "../../../utils/db";
 import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { verify } from "hono/jwt";
 import { deleteCookie } from "hono/cookie";
 import { secret } from "../../../utils/secret";
+import { login } from "../../../utils/login";
 
 app.openapi({
   path: "/accounts/login/", method: "post",
@@ -50,7 +49,7 @@ app.openapi({
     }
   }
 }, async c => {
-  const { username, password: pass } = c.req.valid("json");
+  const { username, password } = c.req.valid("json");
   const headers = c.req.valid("header");
   try{
     await verify(headers["X-csrftoken"], secret);
@@ -59,29 +58,27 @@ app.openapi({
     return c.text("CSRF検証に失敗しました", 403)
   }
 
-  const qres = database.query("SELECT * FROM users WHERE name = ?").all(username);
-  if(!qres.length) return c.json([{
-    username,
-    messages: [],
-    num_tries: 0,
-    success: 0,
-    msg: "ユーザー名またはパスワードが間違っています",
-  }]);
-  const user = DBUserSchema.parse(qres[0]);
-  if(!await password.verify(pass, user.password)) return c.json([{
-    username,
-    messages: [],
-    num_tries: 0,
-    success: 0,
-    msg: "ユーザー名またはパスワードが間違っています",
-  }]);
-  return c.json([{
-    id: user.id,
-    username,
-    messages: [],
-    num_tries: 0,
-    success: 1,
-    msg: "",
-    token: "just a moment"
-  }])
+  const loginResult = await login(c, username, password);
+
+  switch(loginResult.type){
+    case "notFound": case "invalidPass":
+      return c.json([{
+        username,
+        messages: [],
+        num_tries: 0,
+        success: 0,
+        msg: "ユーザー名またはパスワードが間違っています",
+      }]);
+    case "success":
+      return c.json([{
+        id: loginResult.info.id,
+        username,
+        messages: [],
+        num_tries: 0,
+        success: 1,
+        msg: "",
+        token: loginResult.token
+      }])
+  }
+  return c.text("Server error!", 500);
 })
