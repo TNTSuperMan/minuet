@@ -6,7 +6,7 @@ import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { database } from "../../../utils/db";
 import { password } from "bun";
 import { sign } from "hono/jwt";
-import { secret } from "../../../utils/secret";
+import { key } from "../../../utils/secret";
 
 const formdataSchema = z.object({
   username: z.string(),
@@ -81,7 +81,7 @@ app.openapi({
     token: await sign({
       username: body.username,
       exp: Math.floor(Date.now() / 1000) + (14*24*60*60)
-    }, secret, "EdDSA"),
+    }, key.privateKey, "EdDSA"),
     msg: "user created",
     logged_in: true
   }])

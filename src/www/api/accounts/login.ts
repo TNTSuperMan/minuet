@@ -2,7 +2,7 @@ import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { verify } from "hono/jwt";
 import { deleteCookie } from "hono/cookie";
-import { secret } from "../../../utils/secret";
+import { key } from "../../../utils/secret";
 import { login } from "../../../utils/login";
 
 app.openapi({
@@ -52,7 +52,7 @@ app.openapi({
   const { username, password } = c.req.valid("json");
   const headers = c.req.valid("header");
   try{
-    await verify(headers["X-csrftoken"], secret);
+    await verify(headers["X-csrftoken"], key.publicKey);
   }catch{
     deleteCookie(c, "scratchcsrftoken");
     return c.text("CSRF検証に失敗しました", 403)

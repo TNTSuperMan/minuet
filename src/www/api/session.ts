@@ -2,7 +2,7 @@ import { getCookie } from "hono/cookie";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
 import { verify } from "hono/jwt";
-import { secret } from "../../utils/secret";
+import { key } from "../../utils/secret";
 import { database, DBUserSchema } from "../../utils/db";
 import { tokenSchema } from "../../utils/login";
 
@@ -79,7 +79,7 @@ app.openapi({
 }, async c=>{
   const cookie = getCookie(c, "scratchsessionid");
   if(!cookie) return c.json(failed_response);
-  const payload = tokenSchema.safeParse(await verify(cookie, secret).catch(()=>null));
+  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey).catch(()=>null));
   if(!payload.success) return c.json(failed_response);
 
   const users = database.query("SELECT * FROM users WHERE name = ?").all(payload.data.aud);

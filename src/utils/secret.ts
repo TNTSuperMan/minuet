@@ -1,8 +1,11 @@
-import { randomBytes } from "crypto";
 import { sign } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
 
-export const secret = randomBytes(256).toString("ascii");
+//@ts-ignore
+export const key = (await crypto.subtle.generateKey("Ed25519", true, ["sign", "verify"])) as {
+  publicKey: CryptoKey,
+  privateKey: CryptoKey
+};
 
 export const genToken = (payload: JWTPayload, exp: number) => {
   const now = Math.floor(Date.now() / 1000);
@@ -11,5 +14,5 @@ export const genToken = (payload: JWTPayload, exp: number) => {
     exp: now + exp,
     iat: now,
     nbf: now,
-  }, secret, "EdDSA");
+  }, key.privateKey, "EdDSA");
 }

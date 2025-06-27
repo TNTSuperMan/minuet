@@ -1,7 +1,7 @@
 import { setCookie } from "hono/cookie";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { genToken, secret } from "../../utils/secret";
+import { genToken } from "../../utils/secret";
 
 app.openapi({
   path: "/csrf_token/", method: "get",
