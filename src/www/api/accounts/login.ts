@@ -52,7 +52,7 @@ app.openapi({
   const { username, password } = c.req.valid("json");
   const headers = c.req.valid("header");
   try{
-    await verify(headers["X-csrftoken"], key.publicKey);
+    await verify(headers["X-csrftoken"], key.publicKey, "EdDSA");
   }catch{
     deleteCookie(c, "scratchcsrftoken");
     return c.text("CSRF検証に失敗しました", 403)
