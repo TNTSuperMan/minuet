@@ -6,6 +6,12 @@
     "target": "esnext",
     "module": "esnext",
     "lib": ["esnext"],
-    "moduleResolution": "bundler"
-  }
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "noEmit": true
+  },
+  "exclude": ["dist", "node_modules"],
+  "include": ["src"]
 }
