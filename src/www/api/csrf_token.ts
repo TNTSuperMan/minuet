@@ -1,8 +1,7 @@
 import { setCookie } from "hono/cookie";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { sign } from "hono/jwt";
-import { secret } from "../../utils/secret";
+import { genToken, secret } from "../../utils/secret";
 
 app.openapi({
   path: "/csrf_token/", method: "get",
@@ -18,8 +17,6 @@ app.openapi({
     }
   }
 }, async c => {
-  setCookie(c, "scratchcsrftoken", await sign({
-    exp: Math.floor(Date.now() / 1000) + (365*24*60*60)
-  }, secret, "EdDSA"));
+  setCookie(c, "scratchcsrftoken", await genToken({}, 365*24*60*60));
   return c.text("");
 })
