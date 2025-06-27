@@ -5,6 +5,11 @@ import { setCookie } from "hono/cookie";
 import { genToken } from "./secret";
 import { z } from "@hono/zod-openapi";
 
+export const tokenSchema = z.object({
+  jti: z.string(),
+  aud: z.string()
+})
+
 export const login = async (c: Context, name: string, pass: string): Promise<{
   type: "notFound"
 } | {
