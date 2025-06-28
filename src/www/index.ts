@@ -1,6 +1,6 @@
 import app from "./app";
 
-import "./api";
+import "./endpoints";
 import "./www";
 
 export default app;
