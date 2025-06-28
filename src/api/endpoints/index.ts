@@ -3,6 +3,7 @@ import { z } from "@hono/zod-openapi";
 
 import "./accounts";
 import "./news";
+import "./proxy";
 import "./users";
 
 app.openapi({
