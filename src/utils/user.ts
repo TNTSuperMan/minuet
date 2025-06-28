@@ -1,5 +1,5 @@
 import { z } from "@hono/zod-openapi";
-import { database, DBUserSchema } from "../../utils/db";
+import { database, DBUserSchema } from "./db";
 
 export const userSchema = z.object({
   id: z.number().describe("ユーザーID"),

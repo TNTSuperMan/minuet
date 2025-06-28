@@ -1,7 +1,7 @@
 import app from "../../app";
 import { HTTPException } from "hono/http-exception";
 import { z } from "@hono/zod-openapi";
-import { getUser, userSchema } from "../../utils/user";
+import { getUser, userSchema } from "../../../utils/user";
 
 app.openapi({
   path: "/users/{usr}/", method: "get",
