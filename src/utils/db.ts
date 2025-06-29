@@ -29,3 +29,23 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   country  TEXT NOT NULL,
   icon     BLOB
 )`);
+
+database.exec(`CREATE TABLE IF NOT EXISTS projects (
+  id INTEGER PRIMARY KEY,
+  author INTEGER NOT NULL,
+
+  created INTEGER NOT NULL,
+  modified INTEGER NOT NULL,
+  shared INTEGER,
+
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  instructions TEXT NOT NULL,
+
+  comments_allowed INTEGER NOT NULL,
+  public INTEGER NOT NULL,
+  thumbnail BLOB NOT NULL,
+  parent INTEGER,
+
+  json BLOB NOT NULL
+)`)
