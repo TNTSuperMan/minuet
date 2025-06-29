@@ -27,7 +27,8 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   joined   TEXT NOT NULL,
   status   TEXT NOT NULL,
   bio      TEXT NOT NULL,
-  country  TEXT NOT NULL
+  country  TEXT NOT NULL,
+  icon     BLOB
 )`);
 export const DBUserSchema = z.object({
   id: z.number(),
@@ -42,6 +43,7 @@ export const DBUserSchema = z.object({
   status: z.string(),
   bio: z.string(),
   country: z.string(),
+  icon: z.instanceof(Uint8Array).nullable(),
 });
 
 export { database };
