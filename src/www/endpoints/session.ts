@@ -1,7 +1,7 @@
 import { getCookie } from "hono/cookie";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { getLogginedUser } from "../../utils/user";
+import { getSigninedUser } from "../../utils/user";
 
 const responseSchema = z.union([
   z.object({
@@ -74,7 +74,7 @@ app.openapi({
     }
   }
 }, async c=>{
-  const user = await getLogginedUser(c);
+  const user = await getSigninedUser(c);
   if(!user) return c.json(failed_response);
 
   const response: z.infer<typeof responseSchema> = {
