@@ -24,7 +24,7 @@ export const userSchema = z.object({
 });
 
 export const getUser = (name: string): z.infer<typeof userSchema> | null => {
-  const usrdata_raw = database.prepare("SELECT * FROM users WHERE id = ?").all(name);
+  const usrdata_raw = database.prepare("SELECT * FROM users WHERE name = ?").all(name);
   const { data: usrdata } = DBUserSchema.safeParse(usrdata_raw);
   if(!usrdata) return null;
 
