@@ -42,7 +42,7 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
     },
     profile: {
       id: usrdata.id,
-      images: { // まだだお
+      images: {
         "90x90": `http://localhost:4514/user/${usrdata.id}/90/`,
         "60x60": `http://localhost:4514/user/${usrdata.id}/60/`,
         "55x55": `http://localhost:4514/user/${usrdata.id}/55/`,
