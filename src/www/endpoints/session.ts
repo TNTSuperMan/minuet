@@ -120,7 +120,7 @@ app.openapi({
       gender: user.gender,
       id: user.id,
       should_vpn: false,
-      thumbnailUrl: "https://example.com/just_a_moment",
+      thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
       token: cookie,
       username: user.name
     }

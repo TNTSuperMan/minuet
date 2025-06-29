@@ -38,11 +38,11 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
     profile: {
       id: usrdata.id,
       images: { // まだだお
-        "90x90": "https://example.com",
-        "60x60": "https://example.com",
-        "55x55": "https://example.com",
-        "50x50": "https://example.com",
-        "32x32": "https://example.com",
+        "90x90": `http://localhost:4514/user/${usrdata.id}/90/`,
+        "60x60": `http://localhost:4514/user/${usrdata.id}/60/`,
+        "55x55": `http://localhost:4514/user/${usrdata.id}/55/`,
+        "50x50": `http://localhost:4514/user/${usrdata.id}/50/`,
+        "32x32": `http://localhost:4514/user/${usrdata.id}/32/`,
       },
       status: usrdata.status,
       bio: usrdata.bio,
