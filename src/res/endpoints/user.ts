@@ -1,9 +1,10 @@
 import { HTTPException } from "hono/http-exception";
-import { database, DBUserSchema } from "../../utils/db";
+import { database } from "../../utils/db";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
 import sharp from "sharp";
 import { file } from "bun";
+import { DBUserSchema } from "../../utils/user";
 
 const sample_icon = await file("./src/utils/sample.png").bytes();
 

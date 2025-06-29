@@ -1,8 +1,7 @@
 import { Database } from "bun:sqlite";
-import { z } from "@hono/zod-openapi";
 import { resolve } from "path";
 
-const database = new Database(resolve(__dirname, "db.db"), {
+export const database = new Database(resolve(__dirname, "db.db"), {
   create: true,
 });
 
@@ -30,20 +29,3 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   country  TEXT NOT NULL,
   icon     BLOB
 )`);
-export const DBUserSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  birth_month: z.number(),
-  birth_year: z.number(),
-  scratchteam: z.number(),
-  email: z.string().email(),
-  password: z.string(),
-  gender: z.string(),
-  joined: z.string().datetime(),
-  status: z.string(),
-  bio: z.string(),
-  country: z.string(),
-  icon: z.instanceof(Uint8Array).nullable(),
-});
-
-export { database };

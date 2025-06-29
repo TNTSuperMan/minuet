@@ -1,10 +1,26 @@
 import { z } from "@hono/zod-openapi";
-import { database, DBUserSchema } from "./db";
+import { database } from "./db";
 import { Context } from "hono";
 import { getCookie } from "hono/cookie";
 import { tokenSchema } from "./login";
 import { verify } from "hono/jwt";
 import { key } from "./secret";
+
+export const DBUserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  birth_month: z.number(),
+  birth_year: z.number(),
+  scratchteam: z.number(),
+  email: z.string().email(),
+  password: z.string(),
+  gender: z.string(),
+  joined: z.string().datetime(),
+  status: z.string(),
+  bio: z.string(),
+  country: z.string(),
+  icon: z.instanceof(Uint8Array).nullable(),
+});
 
 export const userSchema = z.object({
   id: z.number().describe("ユーザーID"),

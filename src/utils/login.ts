@@ -1,9 +1,10 @@
 import { password, randomUUIDv7 } from "bun";
-import { database, DBUserSchema } from "./db"
+import { database } from "./db"
 import { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { genToken } from "./secret";
 import { z } from "@hono/zod-openapi";
+import { DBUserSchema } from "./user";
 
 export const tokenSchema = z.object({
   jti: z.string(),
