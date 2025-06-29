@@ -30,7 +30,6 @@ app.openapi({
   const { id, width } = c.req.valid("param");
 
   const users = database.prepare("SELECT * FROM users WHERE id = ?").all(parseInt(id));
-  console.log(users);
   if(!users.length) throw new HTTPException(404);
 
   const user = DBUserSchema.parse(users[0]);
