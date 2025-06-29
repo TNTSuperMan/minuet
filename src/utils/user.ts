@@ -1,5 +1,10 @@
 import { z } from "@hono/zod-openapi";
 import { database, DBUserSchema } from "./db";
+import { Context } from "hono";
+import { getCookie } from "hono/cookie";
+import { tokenSchema } from "./login";
+import { verify } from "hono/jwt";
+import { key } from "./secret";
 
 export const userSchema = z.object({
   id: z.number().describe("ユーザーID"),
@@ -49,4 +54,15 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
       country: usrdata.country
     }
   }
+}
+
+export const getLogginedUser = async (c: Context): Promise<z.infer<typeof DBUserSchema> | null> => {
+  const cookie = getCookie(c, "scratchsessionid");
+  if(!cookie) return null;
+  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
+  if(!payload.success) return null;
+
+  const users = database.query("SELECT * FROM users WHERE name = ?").all(payload.data.aud);
+  if(!users) return null;
+  return DBUserSchema.parse(users[0]);
 }

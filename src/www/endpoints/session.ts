@@ -1,10 +1,7 @@
 import { getCookie } from "hono/cookie";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { verify } from "hono/jwt";
-import { key } from "../../utils/secret";
-import { database, DBUserSchema } from "../../utils/db";
-import { tokenSchema } from "../../utils/login";
+import { getLogginedUser } from "../../utils/user";
 
 const responseSchema = z.union([
   z.object({
@@ -77,14 +74,8 @@ app.openapi({
     }
   }
 }, async c=>{
-  const cookie = getCookie(c, "scratchsessionid");
-  if(!cookie) return c.json(failed_response);
-  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
-  if(!payload.success) return c.json(failed_response);
-
-  const users = database.query("SELECT * FROM users WHERE name = ?").all(payload.data.aud);
-  if(!users) return c.json(failed_response);
-  const user = DBUserSchema.parse(users[0]);
+  const user = await getLogginedUser(c);
+  if(!user) return c.json(failed_response);
 
   const response: z.infer<typeof responseSchema> = {
     flags: {
@@ -121,7 +112,7 @@ app.openapi({
       id: user.id,
       should_vpn: false,
       thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
-      token: cookie,
+      token: getCookie(c, "scratchsessionid")!,
       username: user.name
     }
   }
