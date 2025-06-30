@@ -1,6 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { database } from "../../../utils/db";
-import { DBProjectSchema } from "../../../utils/project";
+import { DBProjectSchema, getProject } from "../../../utils/project";
 import { getImages, getSigninedUser, getUserWithID, imagesSchema } from "../../../utils/user";
 import app from "../../app";
 import { z } from "@hono/zod-openapi";
@@ -71,12 +71,8 @@ app.openapi({
     }
   }
 }, async c => {
-  const proj_ = database.prepare(
-    "SELECT * FROM projects WHERE id = ?"
-  ).all(parseInt(c.req.valid("param").id));
-  if(!proj_.length) throw new HTTPException(404);
-
-  const proj = DBProjectSchema.parse(proj_[0]);
+  const proj = getProject(parseInt(c.req.valid("param").id));
+  if(!proj) throw new HTTPException(404);
 
   if(proj.public === 0){
     const user = await getSigninedUser(c);

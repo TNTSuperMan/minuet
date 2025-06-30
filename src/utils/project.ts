@@ -1,4 +1,5 @@
 import { z } from "@hono/zod-openapi";
+import { database } from "./db";
 
 export const DBProjectSchema = z.object({
   id: z.number(),
@@ -19,3 +20,9 @@ export const DBProjectSchema = z.object({
   
   json: z.instanceof(Uint8Array).or(z.string())
 })
+
+export const getProject = (id: number): z.infer<typeof DBProjectSchema> | null => {
+  const projects = database.prepare("SELECT * FROM projects WHERE id = ?").all(id);
+  if(!projects.length) return null;
+  return DBProjectSchema.parse(projects);
+}

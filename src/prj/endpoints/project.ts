@@ -2,7 +2,7 @@ import { HTTPException } from "hono/http-exception";
 import { database } from "../../utils/db";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { DBProjectSchema } from "../../utils/project";
+import { DBProjectSchema, getProject } from "../../utils/project";
 import { verify } from "hono/jwt";
 import { key } from "../../utils/secret";
 
@@ -37,12 +37,8 @@ app.openapi({
 
   if(result === null || typeof result.id !== "number" || result.id !== id) throw new HTTPException(403);
 
-  const proj_ = database.prepare(
-    "SELECT * FROM projects WHERE id = ?"
-  ).all(id);
-  if(!proj_.length) throw new HTTPException(403);
-
-  const proj = DBProjectSchema.parse(proj_[0]);
+  const proj = getProject(id);
+  if(!proj) throw new HTTPException(403);
 
   return c.json(JSON.parse(
     typeof proj.json === "string" ?
