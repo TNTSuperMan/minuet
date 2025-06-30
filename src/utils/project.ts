@@ -24,5 +24,5 @@ export const DBProjectSchema = z.object({
 export const getProject = (id: number): z.infer<typeof DBProjectSchema> | null => {
   const projects = database.prepare("SELECT * FROM projects WHERE id = ?").all(id);
   if(!projects.length) return null;
-  return DBProjectSchema.parse(projects);
+  return DBProjectSchema.parse(projects[0]);
 }
