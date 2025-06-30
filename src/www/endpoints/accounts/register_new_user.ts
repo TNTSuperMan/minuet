@@ -70,7 +70,7 @@ app.openapi({
     body.email,
     await password.hash(body.password),
     body.gender,
-    new Date().toISOString(),
+    Date.now(),
     "", "", body.country
   ))
 

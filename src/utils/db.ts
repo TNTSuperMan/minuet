@@ -23,7 +23,7 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   email    TEXT NOT NULL,
   password TEXT NOT NULL,
   gender   TEXT NOT NULL,
-  joined   TEXT NOT NULL,
+  joined   INTEGER NOT NULL,
   status   TEXT NOT NULL,
   bio      TEXT NOT NULL,
   country  TEXT NOT NULL,

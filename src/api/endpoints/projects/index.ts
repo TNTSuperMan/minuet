@@ -88,7 +88,7 @@ app.openapi({
   return c.json({
     author: {
       history: {
-        joined: author.joined,
+        joined: new Date(author.joined).toISOString(),
       },
       id: author.id,
       profile: {

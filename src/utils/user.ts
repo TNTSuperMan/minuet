@@ -31,7 +31,7 @@ export const DBUserSchema = z.object({
   email: z.string().email(),
   password: z.string(),
   gender: z.string(),
-  joined: z.string().datetime(),
+  joined: z.number(),
   status: z.string(),
   bio: z.string(),
   country: z.string(),
@@ -64,7 +64,7 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
     username: usrdata.name,
     scratchteam: usrdata.scratchteam != 0,
     history: {
-      joined: usrdata.joined
+      joined: new Date(usrdata.joined).toISOString()
     },
     profile: {
       id: usrdata.id,

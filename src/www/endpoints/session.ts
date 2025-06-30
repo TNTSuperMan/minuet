@@ -106,7 +106,7 @@ app.openapi({
       banned: false,
       birthMonth: user.birth_month,
       birthYear: user.birth_year,
-      dateJoined: user.joined,
+      dateJoined: new Date(user.joined).toISOString(),
       email: user.email,
       gender: user.gender,
       id: user.id,
