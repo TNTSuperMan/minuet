@@ -1,3 +1,4 @@
+import { HTTPException } from "hono/http-exception";
 import { database } from "../../utils/db";
 import { getSigninedUser } from "../../utils/user";
 import app from "../app";
@@ -34,10 +35,10 @@ app.openapi({
         }
       }
     }
-  }//@ts-ignore
+  }
 }, async c => {
   const user = await getSigninedUser(c);
-  if(!user) return c.text("", 403);
+  if(!user) throw new HTTPException(403);
 
   const title = "Untitled_" + Date.now();
 
@@ -50,7 +51,7 @@ app.openapi({
   return c.json({
     "autosave-interval": "120",
     "content-name": id.toString(),
-    "content-title": title,
+    "content-title": btoa(title),
     status: "success"
   });
 })
