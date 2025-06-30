@@ -44,7 +44,7 @@ database.exec(`CREATE TABLE IF NOT EXISTS projects (
 
   comments_allowed INTEGER NOT NULL,
   public INTEGER NOT NULL,
-  thumbnail BLOB NOT NULL,
+  thumbnail BLOB,
   parent INTEGER,
 
   json BLOB NOT NULL
