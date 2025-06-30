@@ -17,5 +17,5 @@ export const DBProjectSchema = z.object({
   thumbnail: z.instanceof(Uint8Array).nullable(),
   parent: z.number().nullable(),
   
-  json: z.instanceof(Uint8Array)
+  json: z.instanceof(Uint8Array).or(z.string())
 })

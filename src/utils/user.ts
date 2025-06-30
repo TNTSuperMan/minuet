@@ -35,7 +35,7 @@ export const DBUserSchema = z.object({
   status: z.string(),
   bio: z.string(),
   country: z.string(),
-  icon: z.instanceof(Uint8Array).nullable(),
+  icon: z.instanceof(Uint8Array).or(z.string()).nullable(),
 });
 
 export const userSchema = z.object({
