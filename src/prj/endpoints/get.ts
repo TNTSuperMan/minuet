@@ -1,8 +1,7 @@
 import { HTTPException } from "hono/http-exception";
-import { database } from "../../utils/db";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
-import { DBProjectSchema, getProject } from "../../utils/project";
+import { getProject } from "../../utils/project";
 import { verify } from "hono/jwt";
 import { key } from "../../utils/secret";
 
