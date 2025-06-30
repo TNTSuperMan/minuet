@@ -1,6 +1,5 @@
 import { HTTPException } from "hono/http-exception";
-import { database } from "../../../utils/db";
-import { DBProjectSchema, getProject } from "../../../utils/project";
+import { getProject } from "../../../utils/project";
 import { getImages, getSigninedUser, getUserWithID, imagesSchema } from "../../../utils/user";
 import app from "../../app";
 import { z } from "@hono/zod-openapi";
