@@ -77,7 +77,7 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
 }
 
 export const getSigninedUser = async (c: Context): Promise<z.infer<typeof DBUserSchema> | null> => {
-  const cookie = getCookie(c, "scratchsessionid");
+  const cookie = getCookie(c, "scratchsessionid") ?? c.req.header("X-Token");
   if(!cookie) return null;
   const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
   if(!payload.success) return null;
