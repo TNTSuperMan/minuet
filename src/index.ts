@@ -1,6 +1,7 @@
 import { serve } from "bun";
 import apiApp from "./api";
 import webApp from "./www";
+import prjApp from "./prj";
 import resApp from "./res";
 
 const apiServer = serve({
@@ -11,11 +12,16 @@ const wwwServer = serve({
   fetch: webApp.fetch,
   port: 4517
 });
+const prjServer = serve({
+  fetch: prjApp.fetch,
+  port: 4513
+});
 const resServer = serve({
   fetch: resApp.fetch,
   port: 4514
-})
+});
 
 console.log(`API server is running at ${apiServer.url.toString()}`);
 console.log(`Web server is running at ${wwwServer.url.toString()}`);
+console.log(`Prj server is running at ${prjServer.url.toString()}`);
 console.log(`Res server is running at ${resServer.url.toString()}`);

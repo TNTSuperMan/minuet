@@ -5,5 +5,5 @@ rm develop.zip
 
 cd src/www/scratch-www
 bun i
-ROOT_URL=http://localhost:4517 API_HOST=http://localhost:4519 bun run build
+ROOT_URL=http://localhost:4517 API_HOST=http://localhost:4519 PROJECT_HOST=http://localhost:4513 bun run build
 cd -
