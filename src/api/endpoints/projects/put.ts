@@ -17,7 +17,9 @@ app.openapi({
       content: {
         "application/json": {
           schema: z.object({
-            title: z.string().describe("タイトル")
+            title: z.string().optional().describe("タイトル"),
+            description: z.string().optional().describe("メモとクレジット"),
+            instructions: z.string().optional().describe("使い方"),
           })
         }
       }
@@ -38,11 +40,15 @@ app.openapi({
   const user = await getSigninedUser(c);
   if(!proj || !user || proj.author !== user.id) throw new HTTPException(403);
 
-  const { title } = c.req.valid("json");
+  const body = c.req.valid("json");
 
   database.query(
-    "UPDATE projects SET title = ? WHERE id = ?"
-  ).get(title, proj.id);
+    "UPDATE projects SET title = ?, description = ?, instructions = ? WHERE id = ?"
+  ).get(
+    body.title ?? proj.title,
+    body.description ?? proj.description,
+    body.instructions ?? proj.instructions,
+  proj.id);
 
   return c.json(await getProjectData(proj, user));
 })
