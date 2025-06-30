@@ -5,6 +5,7 @@ import app from "../app";
 import { z } from "@hono/zod-openapi";
 
 import "./get";
+import "./put";
 
 const idSchema = z.object({
   id: z.number()
