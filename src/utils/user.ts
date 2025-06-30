@@ -6,6 +6,22 @@ import { tokenSchema } from "./login";
 import { verify } from "hono/jwt";
 import { key } from "./secret";
 
+export const imagesSchema = z.object({
+  "90x90": z.string().url(),
+  "60x60": z.string().url(),
+  "55x55": z.string().url(),
+  "50x50": z.string().url(),
+  "32x32": z.string().url(),
+}).describe("アイコンURL")
+
+export const getImages = (id: number): z.infer<typeof imagesSchema> => ({
+  "90x90": `http://localhost:4514/user/${id}/90/`,
+  "60x60": `http://localhost:4514/user/${id}/60/`,
+  "55x55": `http://localhost:4514/user/${id}/55/`,
+  "50x50": `http://localhost:4514/user/${id}/50/`,
+  "32x32": `http://localhost:4514/user/${id}/32/`,
+})
+
 export const DBUserSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -31,13 +47,7 @@ export const userSchema = z.object({
   }),
   profile: z.object({
     id: z.number().describe("プロファイルID(よくわからん)"),
-    images: z.object({
-      "90x90": z.string().url(),
-      "60x60": z.string().url(),
-      "55x55": z.string().url(),
-      "50x50": z.string().url(),
-      "32x32": z.string().url(),
-    }).describe("アイコンURL"),
+    images: imagesSchema,
     status: z.string().describe("ユーザーの「私が取り組んでいること」"),
     bio: z.string().describe("ユーザーの「私について」"),
     country: z.string().describe("ユーザーが住んでいる国")
@@ -58,13 +68,7 @@ export const getUser = (name: string): z.infer<typeof userSchema> | null => {
     },
     profile: {
       id: usrdata.id,
-      images: {
-        "90x90": `http://localhost:4514/user/${usrdata.id}/90/`,
-        "60x60": `http://localhost:4514/user/${usrdata.id}/60/`,
-        "55x55": `http://localhost:4514/user/${usrdata.id}/55/`,
-        "50x50": `http://localhost:4514/user/${usrdata.id}/50/`,
-        "32x32": `http://localhost:4514/user/${usrdata.id}/32/`,
-      },
+      images: getImages(usrdata.id),
       status: usrdata.status,
       bio: usrdata.bio,
       country: usrdata.country
