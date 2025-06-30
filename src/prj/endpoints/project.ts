@@ -9,7 +9,7 @@ import { key } from "../../utils/secret";
 const textDecoder = new TextDecoder;
 
 app.openapi({
-  path: "/:id", method: "get",
+  path: "/{id}", method: "get",
   description: "プロジェクトのJSONを返します",
   request: {
     params: z.object({
