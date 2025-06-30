@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception";
 import { database } from "../../../utils/db";
 import { DBProjectSchema } from "../../../utils/project";
-import { DBUserSchema, getImages, getSigninedUser, imagesSchema } from "../../../utils/user";
+import { getImages, getSigninedUser, getUserWithID, imagesSchema } from "../../../utils/user";
 import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { genToken } from "../../../utils/secret";
@@ -83,7 +83,7 @@ app.openapi({
     if(!user || proj.author !== user.id) throw new HTTPException(404);
   }
 
-  const author = DBUserSchema.parse(database.prepare("SELECT * FROM users WHERE id = ?").all(proj.author)[0]);
+  const author = getUserWithID(proj.author)!;
 
   return c.json({
     author: {

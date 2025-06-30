@@ -1,10 +1,9 @@
 import { HTTPException } from "hono/http-exception";
-import { database } from "../../utils/db";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
 import sharp from "sharp";
 import { file } from "bun";
-import { DBUserSchema } from "../../utils/user";
+import { getUserWithID } from "../../utils/user";
 
 const sample_icon = await file("./src/utils/sample.png").bytes();
 
@@ -30,10 +29,8 @@ app.openapi({
 }, async c => {
   const { id, width } = c.req.valid("param");
 
-  const users = database.prepare("SELECT * FROM users WHERE id = ?").all(parseInt(id));
-  if(!users.length) throw new HTTPException(404);
-
-  const user = DBUserSchema.parse(users[0]);
+  const user = getUserWithID(parseInt(id));
+  if(!user) throw new HTTPException(404);
 
   return c.body(await sharp(user.icon ?? sample_icon)
     .resize(parseInt(width))

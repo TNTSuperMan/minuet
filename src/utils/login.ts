@@ -4,7 +4,7 @@ import { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { genToken } from "./secret";
 import { z } from "@hono/zod-openapi";
-import { DBUserSchema } from "./user";
+import { DBUserSchema, getUser } from "./user";
 
 export const tokenSchema = z.object({
   jti: z.string(),
@@ -20,9 +20,8 @@ export const login = async (c: Context, name: string, pass: string): Promise<{
   token: string,
   info: z.infer<typeof DBUserSchema>
 }> => {
-  const users = database.query("SELECT * FROM users WHERE name = ?").all(name);
-  if(!users.length) return { type: "notFound" };
-  const user = DBUserSchema.parse(users[0]);
+  const user = getUser(name);
+  if(!user) return { type: "notFound" };
   if(!await password.verify(pass, user.password)) return { type: "invalidPass" };
 
   const token = {

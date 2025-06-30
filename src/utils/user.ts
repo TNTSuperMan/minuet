@@ -72,7 +72,5 @@ export const getSigninedUser = async (c: Context): Promise<z.infer<typeof DBUser
   const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
   if(!payload.success) return null;
 
-  const users = database.query("SELECT * FROM users WHERE name = ?").all(payload.data.aud);
-  if(!users) return null;
-  return DBUserSchema.parse(users[0]);
+  return getUser(payload.data.aud);
 }
