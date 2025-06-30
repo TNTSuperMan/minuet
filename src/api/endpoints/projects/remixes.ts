@@ -7,7 +7,7 @@ app.openapi({
   description: "プロジェクトのリミックスリスト",
   request: {
     query: z.object({
-      limit: z.number().describe("表示上限")
+      limit: z.string().regex(/^\d+$/).describe("表示上限")
     })
   },
   responses: {
