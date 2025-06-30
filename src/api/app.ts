@@ -26,7 +26,7 @@ app.doc("/spec", {
     return c.json({
       code: "InternalServerError",
       message: "Internal server error occurred"
-    })
+    }, 500)
   }
 }).notFound(()=>{
   throw new HTTPException(404);
