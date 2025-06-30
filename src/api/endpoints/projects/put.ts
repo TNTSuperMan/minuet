@@ -4,7 +4,7 @@ import { getSigninedUser } from "../../../utils/user";
 import app from "../../app";
 import { z } from "@hono/zod-openapi";
 import { database } from "../../../utils/db";
-import { getProjectData, projectDataSchema } from ".";
+import { getProjectData, projectDataSchema } from "./_util";
 
 app.openapi({
   path: "/projects/:id", method: "put",

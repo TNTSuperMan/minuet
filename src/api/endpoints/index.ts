@@ -4,7 +4,6 @@ import { z } from "@hono/zod-openapi";
 import "./accounts";
 import "./news";
 import "./projects";
-import "./projects/put";
 import "./proxy";
 import "./users";
 
