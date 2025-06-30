@@ -6,6 +6,7 @@ import { z } from "@hono/zod-openapi";
 import { getProjectData, projectDataSchema } from "./_util";
 
 import "./put";
+import "./remixes";
 
 app.openapi({
   path: "/projects/:id", method: "get",
