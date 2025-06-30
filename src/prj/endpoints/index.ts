@@ -4,6 +4,8 @@ import { getSigninedUser } from "../../utils/user";
 import app from "../app";
 import { z } from "@hono/zod-openapi";
 
+import "./project";
+
 const idSchema = z.object({
   id: z.number()
 })
