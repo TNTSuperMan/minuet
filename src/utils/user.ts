@@ -54,26 +54,16 @@ export const userSchema = z.object({
   })
 });
 
-export const getUser = (name: string): z.infer<typeof userSchema> | null => {
-  const usrdata_raw = database.prepare("SELECT * FROM users WHERE name = ?").all(name);
-  const { data: usrdata } = DBUserSchema.safeParse(usrdata_raw);
-  if(!usrdata) return null;
+export const getUser = (name: string): z.infer<typeof DBUserSchema> | null => {
+  const users = database.prepare("SELECT * FROM users WHERE name = ?").all(name);
+  if(!users.length) return null;
+  return DBUserSchema.parse(users[0]);
+}
 
-  return {
-    id: usrdata.id,
-    username: usrdata.name,
-    scratchteam: usrdata.scratchteam != 0,
-    history: {
-      joined: new Date(usrdata.joined).toISOString()
-    },
-    profile: {
-      id: usrdata.id,
-      images: getImages(usrdata.id),
-      status: usrdata.status,
-      bio: usrdata.bio,
-      country: usrdata.country
-    }
-  }
+export const getUserWithID = (id: number): z.infer<typeof DBUserSchema> | null => {
+  const users = database.query("SELECT * FROM users WHERE id = ?").all(id);
+  if(!users.length) return null;
+  return DBUserSchema.parse(users[0]);
 }
 
 export const getSigninedUser = async (c: Context): Promise<z.infer<typeof DBUserSchema> | null> => {

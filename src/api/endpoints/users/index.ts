@@ -1,7 +1,7 @@
 import app from "../../app";
 import { HTTPException } from "hono/http-exception";
 import { z } from "@hono/zod-openapi";
-import { getUser, userSchema } from "../../../utils/user";
+import { getImages, getUser, userSchema } from "../../../utils/user";
 
 app.openapi({
   path: "/users/{usr}/", method: "get",
@@ -24,5 +24,20 @@ app.openapi({
 }, c => {
   const user = getUser(c.req.valid("param").usr);
   if(!user) throw new HTTPException(404);
-  else return c.json(user);
+  
+  else return c.json({
+    id: user.id,
+    username: user.name,
+    scratchteam: user.scratchteam != 0,
+    history: {
+      joined: new Date(user.joined).toISOString()
+    },
+    profile: {
+      id: user.id,
+      images: getImages(user.id),
+      status: user.status,
+      bio: user.bio,
+      country: user.country
+    }
+  });
 })
