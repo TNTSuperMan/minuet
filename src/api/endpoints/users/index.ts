@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { z } from "@hono/zod-openapi";
 import { getImages, getUser, userSchema } from "../../../utils/user";
 
+import "./messages";
 import "./projects";
 
 app.openapi({
