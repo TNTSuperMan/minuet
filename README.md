@@ -3,6 +3,9 @@
 > 
 > "Scratch"はMIT MediaLabの商標であり、このリポジトリはそれに関する権利を主張しません。  
 > Scratch" is a trademark of MIT MediaLab and this repository claims no rights thereto.
+> 
+> そのため、このプログラムの使用は教育・研究・個人利用に留めてください。
+> Therefore, this program should be used only for educational, research, and personal use.
 
 # scratch-replica
 ScratchのウェブサイトをHonoで模倣しています。  
