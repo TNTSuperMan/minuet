@@ -49,3 +49,9 @@ database.exec(`CREATE TABLE IF NOT EXISTS projects (
 
   json BLOB NOT NULL
 )`)
+
+database.exec(`CREATE TABLE IF NOT EXISTS assets (
+  hash BLOB PRIMARY KEY,
+  type TEXT NOT NULL,
+  content BLOB NOT NULL
+)`)
