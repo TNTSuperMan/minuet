@@ -4,7 +4,7 @@ import app from "../app";
 import { z } from "@hono/zod-openapi";
 import { database } from "../../utils/db";
 
-const path_reg = /^([\da-f]{32})\.(\w+)$/;
+export const path_reg = /^([\da-f]{32})\.(\w+)$/;
 
 const extensionMap: {
   [key: string]: string | void
