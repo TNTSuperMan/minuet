@@ -17,6 +17,7 @@ const extensionMap: {
 
 app.openapi({
   path: "/{name}", method: "post",
+  description: "アセットを追加します。",
   request: {
     params: z.object({
       name: z.string().regex(path_reg).describe("ファイル名")
