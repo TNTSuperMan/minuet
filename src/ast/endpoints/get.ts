@@ -11,7 +11,7 @@ const assets_schema = z.array(z.object({
 }))
 
 app.openapi({
-  path: "/internalapi/asset/{path}/get", method: "post",
+  path: "/internalapi/asset/{path}/get/", method: "post",
   description: "アセットを取得します",
   request: {
     params: z.object({
