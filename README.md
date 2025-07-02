@@ -29,4 +29,6 @@ $ bun dev
 ```
 APIサーバーは[http://localhost:4519](http://localhost:4519)、  
 Webサーバーは[http://localhost:4517](http://localhost:4517)、  
-リソースサーバーは[http://localhost:4514](http://localhost:4514)で動きます。
+プロジェクトサーバーは[http://localhost:4513](http://localhost:4513)、  
+リソースサーバーは[http://localhost:4514](http://localhost:4514)、
+アセットサーバーは[http://localhost:4518](http://localhost:4518)で動きます。
