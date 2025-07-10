@@ -1,39 +1,32 @@
-import { password, randomUUIDv7 } from "bun";
-import { database } from "./db"
-import { Context } from "hono";
-import { setCookie } from "hono/cookie";
-import { genToken } from "./secret";
-import { z } from "@hono/zod-openapi";
+import { password, randomUUIDv7 } from "bun";;
+import { createExpire } from "./secret";
 import { DBUserSchema, getUser } from "./user";
+import { ElysiaContext } from "./app";
 
-export const tokenSchema = z.object({
-  jti: z.string(),
-  aud: z.string()
-})
-
-export const login = async (c: Context, name: string, pass: string): Promise<{
+export const login = async ({ cookie, jwt }: ElysiaContext, name: string, pass: string): Promise<{
   type: "notFound"
 } | {
   type: "invalidPass"
 } | {
   type: "success",
   token: string,
-  info: z.infer<typeof DBUserSchema>
+  info: typeof DBUserSchema.static
 }> => {
   const user = getUser(name);
   if(!user) return { type: "notFound" };
   if(!await password.verify(pass, user.password)) return { type: "invalidPass" };
-
-  const token = {
-    jti: randomUUIDv7(),
-    aud: user.name
-  }
   
-  setCookie(c, "scratchsessionid", await genToken(token, 14*24*60*60));
+  const token = await jwt.sign({
+    jti: randomUUIDv7(),
+    aud: user.name,
+    ...createExpire(14*24*60*60)
+  })
+
+  cookie["scratchsessionid"].value = token;
 
   return {
     type: "success",
-    token: await genToken(token, 14*24*60*60),
+    token,
     info: user
   }
 }
