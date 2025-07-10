@@ -1,10 +1,12 @@
 import jwt from "@elysiajs/jwt";
 import swagger from "@elysiajs/swagger";
-import Elysia from "elysia";
+import Elysia, { InferContext } from "elysia";
 import { key } from "./secret";
 import cors from "@elysiajs/cors";
 
 const version = "0.0.0";
+
+export type ElysiaContext = InferContext<ReturnType<typeof createElysiaApp>>;
 
 export const createElysiaApp = (name: string) => new Elysia()
   .use(swagger({ documentation: { info: { title: name + " document", version } } }))
