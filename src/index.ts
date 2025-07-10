@@ -1,33 +1,17 @@
-import { serve } from "bun";
+import Elysia from "elysia";
 import apiApp from "./api";
-import webApp from "./www";
+import wwwApp from "./www";
 import prjApp from "./prj";
 import resApp from "./res";
 import astApp from "./ast";
 
-const apiServer = serve({
-  fetch: apiApp.fetch,
-  port: 4519
-});
-const wwwServer = serve({
-  fetch: webApp.fetch,
-  port: 4517
-});
-const prjServer = serve({
-  fetch: prjApp.fetch,
-  port: 4513
-});
-const resServer = serve({
-  fetch: resApp.fetch,
-  port: 4514
-});
-const astServer = serve({
-  fetch: astApp.fetch,
-  port: 4518
-});
+const listen = (app: Elysia<any, any>, name: string, port: number) => {
+  app.listen(port);
+console.log(`${name} server is running at http://localhost:${port}`);
+}
 
-console.log(`API server is running at ${apiServer.url.toString()}`);
-console.log(`Web server is running at ${wwwServer.url.toString()}`);
-console.log(`Prj server is running at ${prjServer.url.toString()}`);
-console.log(`Res server is running at ${resServer.url.toString()}`);
-console.log(`Ast server is running at ${astServer.url.toString()}`);
+listen(apiApp, "API", 4519);
+listen(wwwApp, "WWW", 4517);
+listen(prjApp, "Prj", 4513);
+listen(resApp, "Res", 4514);
+listen(astApp, "AST", 4518);
