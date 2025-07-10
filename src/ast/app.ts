@@ -1,40 +1,30 @@
-import { swaggerUI } from "@hono/swagger-ui";
-import { OpenAPIHono } from "@hono/zod-openapi";
-import { cors } from "hono/cors";
-import { HTTPException } from "hono/http-exception";
+import cors from "@elysiajs/cors";
+import swagger from "@elysiajs/swagger";
+import Elysia from "elysia";
 
-const app = new OpenAPIHono;
-
-app.doc("/spec", {
-  openapi: "3.0.0",
-  info: {
-    title: "Assets API document",
-    version: "1.0.0"
-  }
-}).get("/docs", swaggerUI({
-  url: "/spec"
-})).onError((e,c)=>{
-  if(e instanceof HTTPException){
-    if(e.status === 404){
-      return c.text("404", 404);
-    }else return e.getResponse();
-  }else{
-    console.error(e);
-    return c.json({
-      code: "InternalServerError",
-      message: "Internal server error occurred"
-    })
-  }
-}).notFound(()=>{
-  throw new HTTPException(404);
-});
-app.use(cors({
+const app = new Elysia()
+.use(swagger({ documentation: { info: { title: "Assets API document", version: "0.0.0" } } }))
+.use(cors({
   origin: "http://localhost:4517",
-  allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type', 'Cookie'],
-  allowMethods: ['POST', 'PUT', 'GET', 'OPTIONS'],
+  allowedHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type', 'Cookie'],
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS'],
   exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
   maxAge: 600,
   credentials: true,
 }))
+.onError(({code, set, error})=>{
+  switch(code){
+    case "NOT_FOUND":
+      set.status = 404;
+      return "404 Not Found";
+    case "INTERNAL_SERVER_ERROR":
+      console.error(error);
+      set.status = 500;
+      return {
+        code: "InternalServerError",
+        message: "Internal server error occurred"
+      }
+  }
+});
 
 export default app
