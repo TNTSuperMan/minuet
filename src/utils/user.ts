@@ -1,6 +1,5 @@
+import { ElysiaContext } from "./app";
 import { database } from "./db";
-import { tokenSchema } from "./login";
-import { key } from "./secret";
 import { t } from "elysia";
 
 export const imagesSchema = t.Object({
@@ -63,11 +62,16 @@ export const getUserWithID = (id: number): typeof DBUserSchema.static | null => 
   return DBUserSchema.parse(users[0]);
 }
 
-export const getSigninedUser = async (c: Context): Promise<typeof DBUserSchema.static | null> => {
-  const cookie = getCookie(c, "scratchsessionid") ?? c.req.header("X-Token");
-  if(!cookie) return null;
-  const payload = tokenSchema.safeParse(await verify(cookie, key.publicKey, "EdDSA").catch(()=>null));
-  if(!payload.success) return null;
+export const deriveSigninedUser = async ({ cookie, headers, jwt }: ElysiaContext): Promise<{
+  user?: typeof DBUserSchema.static | null
+}> => {
+  const key = cookie["scratchsessionid"].value ?? headers["X-Token"];
+  if(!key) return {};
 
-  return getUser(payload.data.aud);
+  const payload = await jwt.verify(key);
+  if(!payload) return {};
+
+  if(typeof payload.aud !== "string") return {}; 
+
+  return { user: getUser(payload.aud) };
 }
