@@ -1,21 +1,7 @@
-import cors from "@elysiajs/cors";
-import swagger from "@elysiajs/swagger";
-import Elysia from "elysia";
 import { handleWWW } from "./www";
-import jwt from "@elysiajs/jwt";
-import { key } from "../utils/secret";
+import { createElysiaApp } from "../utils/app";
 
-const app = new Elysia()
-.use(swagger({ documentation: { info: { title: "WWW document", version: "0.0.0" } } }))
-.use(jwt({ name: "jwt", secret: key.privateKey }))
-.use(cors({
-  origin: "http://localhost:4517",
-  allowedHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type'],
-  methods: ['POST', 'PUT', 'GET', 'OPTIONS'],
-  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
-  maxAge: 600,
-  credentials: true,
-}))
+const app = createElysiaApp("WWW")
 .onError(async({code, set, error, route, redirect})=>{
   switch(code){
     case "NOT_FOUND":

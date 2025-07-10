@@ -1,20 +1,6 @@
-import cors from "@elysiajs/cors";
-import jwt from "@elysiajs/jwt";
-import swagger from "@elysiajs/swagger";
-import Elysia from "elysia";
-import { key } from "../utils/secret";
+import { createElysiaApp } from "../utils/app";
 
-const app = new Elysia()
-.use(swagger({ documentation: { info: { title: "Assets API document", version: "0.0.0" } } }))
-.use(jwt({ name: "jwt", secret: key.privateKey }))
-.use(cors({
-  origin: "http://localhost:4517",
-  allowedHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type', 'Cookie'],
-  methods: ['POST', 'PUT', 'GET', 'OPTIONS'],
-  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
-  maxAge: 600,
-  credentials: true,
-}))
+const app = createElysiaApp("Assets API")
 .onError(({code, set, error})=>{
   switch(code){
     case "NOT_FOUND":
