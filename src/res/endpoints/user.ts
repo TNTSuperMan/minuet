@@ -22,4 +22,7 @@ app.get("/user/:id/:width", async ({ params, set }) => {
     id: t.String({ pattern: '^[0-9]+$' }),
     width: t.String({ pattern: '^[0-9]+$' }),
   }),
+  detail: {
+    summary: "ユーザーアイコンを取得します"
+  }
 })
