@@ -2,9 +2,12 @@ import cors from "@elysiajs/cors";
 import swagger from "@elysiajs/swagger";
 import Elysia from "elysia";
 import { handleWWW } from "./www";
+import jwt from "@elysiajs/jwt";
+import { key } from "../utils/secret";
 
 const app = new Elysia()
 .use(swagger({ documentation: { info: { title: "WWW document", version: "0.0.0" } } }))
+.use(jwt({ name: "jwt", secret: key.privateKey }))
 .use(cors({
   origin: "http://localhost:4517",
   allowedHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests', 'Content-type'],
