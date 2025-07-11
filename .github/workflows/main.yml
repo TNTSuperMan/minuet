@@ -1,0 +1,51 @@
+name: Build and Publish Docker Image to GitHub Packages
+
+on:
+  push:
+    branches:
+      - main # mainブランチが更新されたときにトリガー
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest # Ubuntu環境で実行
+
+    permissions:
+      contents: read
+      packages: write # GitHub Packagesへの書き込み権限を付与
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest # 使用したいBunのバージョンを指定
+
+    - name: Install dependencies and run setup script
+      run: |
+        bun i
+        sh setup.sh
+
+    - name: Build Docker image
+      env:
+        # GitHub PackagesのレジストリURL
+        REGISTRY: ghcr.io
+        # オーナー名とリポジトリ名からイメージ名を構築
+        IMAGE_NAME: ${{ github.repository }}
+      run: |
+        docker build . --file Dockerfile --tag $REGISTRY/$IMAGE_NAME:latest
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }} # Workflowを実行したユーザー名
+        password: ${{ secrets.GITHUB_TOKEN }} # GitHubが自動で発行するトークン
+
+    - name: Push Docker image to GitHub Packages
+      env:
+        REGISTRY: ghcr.io
+        IMAGE_NAME: ${{ github.repository }}
+      run: |
+        docker push $REGISTRY/$IMAGE_NAME:latest
