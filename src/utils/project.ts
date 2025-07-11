@@ -1,4 +1,4 @@
-import { t } from "elysia";
+import { getSchemaValidator, t } from "elysia";
 import { database } from "./db";
 
 export const DBProjectSchema = t.Object({
@@ -24,5 +24,5 @@ export const DBProjectSchema = t.Object({
 export const getProject = (id: number): typeof DBProjectSchema.static | null => {
   const projects = database.prepare("SELECT * FROM projects WHERE id = ?").all(id);
   if(!projects.length) return null;
-  return DBProjectSchema.parse(projects[0]);
+  return projects[0] as any;
 }
