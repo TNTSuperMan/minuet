@@ -15,7 +15,7 @@ app.get("/internalapi/asset/:path/get/", ({ params, set }) => {
   const [,hash] = path_reg.exec(path)!;
   const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-  const assets = parser.parse(database.prepare(`SELECT * FROM assets WHERE hash = ?`).all(hashbin));
+  const assets = parser.parse(database.prepare(`SELECT * FROM assets WHERE hash = ?`).all(hashbin)) as any as typeof assets_schema.static;
   if(!assets.length) throw new NotFoundError();
 
   set.headers["content-type"] = assets[0].type;
