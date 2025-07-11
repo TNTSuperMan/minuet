@@ -8,14 +8,14 @@
 > Therefore, this program should be used only for educational, research, and personal use.
 
 # scratch-replica
-ScratchのウェブサイトをHonoで模倣しています。  
+Scratchのウェブサイトを~~Hono~~Elysiaで模倣しています。  
 多分オフラインでも動きます。
 
 ## 環境
 |名目|名前|
 |-|-|
 |ランタイム|Bun|
-|フレームワーク|Hono|
+|フレームワーク|Elysia|
 |データベース|SQLite|
 
 ## 導入
