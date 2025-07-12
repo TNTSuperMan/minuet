@@ -26,7 +26,8 @@ app.post("/", async ({ body, user, set }) => {
     status: "success"
   };
 }, {
-  body: t.File({ type: "application/json" }),
+  detail: { summary: "新規プロジェクトの保存要求を実行します" },
+  body: t.File({ type: "application/json", description: "プロジェクトのJSONデータ" }),
   response: {
     200: t.Object({
       "autosave-interval": t.Literal("120"),
