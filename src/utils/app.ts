@@ -7,6 +7,8 @@ import { deriveSigninedUser } from "./user";
 
 const version = "0.0.0";
 
+export type ElysiaApp = ReturnType<typeof createElysiaApp>;
+
 export type ElysiaContext = InferContext<ReturnType<typeof createElysiaAppWithoutDerives>>;
 
 const createElysiaAppWithoutDerives = (name: string) => new Elysia()
