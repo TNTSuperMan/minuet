@@ -1,45 +1,29 @@
-import { HTTPException } from "hono/http-exception";
 import app from "../app";
-import { z } from "@hono/zod-openapi";
 import { getProject } from "../../utils/project";
-import { verify } from "hono/jwt";
-import { key } from "../../utils/secret";
+import { NotFoundError, t } from "elysia";
 
 const textDecoder = new TextDecoder;
 
-app.openapi({
-  path: "/{id}", method: "get",
-  description: "プロジェクトのJSONを返します",
-  request: {
-    params: z.object({
-      id: z.string().regex(/^\d+$/).describe("プロジェクトID"),
-    }),
-    query: z.object({
-      token: z.string().describe("プロジェクトトークン")
-    })
-  },
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "application/json": {
-          schema: z.any().describe("プロジェクトデータ")
-        }
-      }
-    }
-  }
-}, async c => {
-  const { token } = c.req.valid("query");
-  const id = parseInt(c.req.valid("param").id);
+app.get("/:id", async ({ params: { id }, query: { token }, jwt }) => {
 
-  const result = await verify(token, key.publicKey, "EdDSA").catch(()=>null);
+  const id_num = parseInt(id);
 
-  if(result === null || typeof result.id !== "number" || result.id !== id) throw new HTTPException(403);
+  const result = await jwt.verify(token).catch(()=>null);
 
-  const proj = getProject(id);
-  if(!proj) throw new HTTPException(403);
+  if(result === null || typeof result !== "object" || typeof result.id !== "number" || result.id !== id_num) throw new NotFoundError;
 
-  return c.json(JSON.parse(
+  const proj = getProject(id_num);
+  if(!proj) throw new NotFoundError;
+
+  return JSON.parse(
     typeof proj.json === "string" ?
-    proj.json : textDecoder.decode(proj.json)))
+    proj.json : textDecoder.decode(proj.json))
+}, {
+  detail: { summary: "プロジェクトのJSONを返します" },
+  params: t.Object({
+    id: t.String()
+  }),
+  query: t.Object({
+    token: t.String()
+  })
 })
