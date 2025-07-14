@@ -26,6 +26,7 @@ export interface DBUser {
   scratchteam: 0 | 1;
   email: string;
   password: string;
+  gender: string;
   joined: number;
   status: string;
   bio: string;
