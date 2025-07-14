@@ -1,58 +1,56 @@
-import { getCookie } from "hono/cookie";
 import app from "../app";
-import { z } from "@hono/zod-openapi";
-import { getSigninedUser } from "../../utils/user";
+import { t } from "elysia";
 
-const responseSchema = z.union([
-  z.object({
-    flags: z.object({
-      gallery_comments_enabled: z.boolean(),
-      project_comments_enabled: z.boolean(),
-      userprofile_comments_enabled: z.boolean(),
+const responseSchema = t.Union([
+  t.Object({
+    flags: t.Object({
+      gallery_comments_enabled: t.Boolean(),
+      project_comments_enabled: t.Boolean(),
+      userprofile_comments_enabled: t.Boolean(),
     })
   }),
-  z.object({
-    flags: z.object({
-      confirm_email_banner: z.boolean(),
-      everything_is_totally_normal: z.boolean(),
-      gallery_comments_enabled: z.boolean(),
-      has_outstanding_email_confirmation: z.boolean(),
-      must_complete_registration: z.boolean(),
-      must_reset_password: z.boolean().describe("生徒のパスワードをリセットするか"),
-      project_comments_enabled: z.boolean(),
-      show_welcome: z.boolean(),
-      unsupported_browser_banner: z.boolean(),
-      userprofile_comments_enabled: z.boolean(),
-      with_parent_email: z.boolean(),
+  t.Object({
+    flags: t.Object({
+      confirm_email_banner: t.Boolean(),
+      everything_is_totally_normal: t.Boolean(),
+      gallery_comments_enabled: t.Boolean(),
+      has_outstanding_email_confirmation: t.Boolean(),
+      must_complete_registration: t.Boolean(),
+      must_reset_password: t.Boolean({ description: "生徒のパスワードをリセットするか" }),
+      project_comments_enabled: t.Boolean(),
+      show_welcome: t.Boolean(),
+      unsupported_browser_banner: t.Boolean(),
+      userprofile_comments_enabled: t.Boolean(),
+      with_parent_email: t.Boolean(),
     }),
-    permissions: z.object({
-      admin: z.boolean().describe("管理者かどうか(よくわからん、モデレーター向け？)"),
-      educator: z.boolean().describe("教育者?"),
-      educator_invitee: z.boolean(),
-      invited_scratcher: z.boolean().describe("Scratcherに招待されているか?"),
-      mute_status: z.object({}),
-      new_scratcher: z.boolean().describe("NewScratcherかどうか"),
-      scratcher: z.boolean().describe("Scratcherかどうか"),
-      social: z.boolean(),
-      student: z.boolean().describe("生徒かどうか"),
+    permissions: t.Object({
+      admin: t.Boolean().describe("管理者かどうか(よくわからん、モデレーター向け？)"),
+      educator: t.Boolean().describe("教育者?"),
+      educator_invitee: t.Boolean(),
+      invited_scratcher: t.Boolean().describe("Scratcherに招待されているか?"),
+      mute_status: t.Object({}),
+      new_scratcher: t.Boolean().describe("NewScratcherかどうか"),
+      scratcher: t.Boolean().describe("Scratcherかどうか"),
+      social: t.Boolean(),
+      student: t.Boolean().describe("生徒かどうか"),
     }),
-    user: z.object({
-      banned: z.boolean().describe("ブロックされているか"),
-      birthMonth: z.number().describe("誕生月"),
-      birthYear: z.number().describe("誕生年"),
-      dateJoined: z.string().datetime().describe("登録日時(ISO)"),
-      email: z.string().email().describe("メールアドレス"),
-      gender: z.string().describe("性別"),
-      id: z.number().describe("ユーザーID"),
-      should_vpn: z.boolean(),
-      thumbnailUrl: z.string().url().describe("アイコンURL"),
-      token: z.string().describe("アクセストークン"),
-      username: z.string().describe("ユーザー名")
+    user: t.Object({
+      banned: t.Boolean().describe("ブロックされているか"),
+      birthMonth: t.Number().describe("誕生月"),
+      birthYear: t.Number().describe("誕生年"),
+      dateJoined: t.String().datetime().describe("登録日時(ISO)"),
+      email: t.String().email().describe("メールアドレス"),
+      gender: t.String().describe("性別"),
+      id: t.Number().describe("ユーザーID"),
+      should_vpn: t.Boolean(),
+      thumbnailUrl: t.String().url().describe("アイコンURL"),
+      token: t.String().describe("アクセストークン"),
+      username: t.String().describe("ユーザー名")
     })
   })
 ])
 
-const failed_response: z.infer<typeof responseSchema> = {
+const no_signin_response: typeof responseSchema.static = {
   flags: {
     gallery_comments_enabled: true,
     project_comments_enabled: true,
@@ -60,24 +58,10 @@ const failed_response: z.infer<typeof responseSchema> = {
   }
 };
 
-app.openapi({
-  path: "/session/", method: "get",
-  description: "セッション情報(正直CSRFむずかちい)",
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "application/json": {
-          schema: responseSchema
-        }
-      }
-    }
-  }
-}, async c=>{
-  const user = await getSigninedUser(c);
-  if(!user) return c.json(failed_response);
+app.get("/session/", ({ user, cookie }) => {
+  if(!user) return no_signin_response;
 
-  const response: z.infer<typeof responseSchema> = {
+  const response: typeof responseSchema.static = {
     flags: {
       confirm_email_banner: false,
       everything_is_totally_normal: false,
@@ -112,9 +96,12 @@ app.openapi({
       id: user.id,
       should_vpn: false,
       thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
-      token: getCookie(c, "scratchsessionid")!,
+      token: cookie.scratchsessionid.value!,
       username: user.name
     }
   }
-  return c.json(response);
+  return response;
+}, {
+  detail: { summary: "セッション情報を返します" },
+  response: responseSchema
 })
