@@ -1,28 +1,28 @@
-import { getSchemaValidator, t } from "elysia";
 import { database } from "./db";
 
-export const DBProjectSchema = t.Object({
-  id: t.Number(),
-  author: t.Number(),
-
-  created: t.Number(),
-  modified: t.Number(),
-  shared: t.Number().nullable(),
-
-  title: t.String(),
-  description: t.String(),
-  instructions: t.String(),
-
-  comments_allowed: t.Number(),
-  public: t.Number(),
-  thumbnail: t.Union([t.Uint8Array(), t.Null()]),
-  parent: t.Union([t.Number(), t.Null()]),
+export interface DBProject {
+  id: number;
+  author: number;
   
-  json: t.Union([t.Uint8Array(), t.String()])
-})
+  created: number;
+  modified: number;
+  shared: number | null;
 
-export const getProject = (id: number): typeof DBProjectSchema.static | null => {
-  const projects = database.prepare("SELECT * FROM projects WHERE id = ?").all(id);
-  if(!projects.length) return null;
-  return projects[0] as any;
+  title: string;
+  description: string;
+  instructions: string;
+
+  comments_allowed: 0 | 1;
+  public: 0 | 1;
+  thumbnail: Uint8Array | null;
+  parent: number | null;
+
+  json: string;
+}
+
+const projectQuery = database.query("SELECT * FROM projects WHERE id = ?");
+
+export const getProject = (id: number): DBProject | null => {
+  const projects = projectQuery.get(id);
+  return projects ?? null as any;
 }

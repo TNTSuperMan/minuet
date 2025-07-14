@@ -47,7 +47,7 @@ database.exec(`CREATE TABLE IF NOT EXISTS projects (
   thumbnail BLOB,
   parent INTEGER,
 
-  json BLOB NOT NULL
+  json TEXT NOT NULL
 )`)
 
 database.exec(`CREATE TABLE IF NOT EXISTS assets (

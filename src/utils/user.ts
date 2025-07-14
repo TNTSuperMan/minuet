@@ -18,21 +18,20 @@ export const getImages = (id: number): typeof imagesSchema.static => ({
   "32x32": `http://localhost:4514/user/${id}/32/`,
 })
 
-export const DBUserSchema = t.Object({
-  id: t.Number(),
-  name: t.String(),
-  birth_month: t.Number(),
-  birth_year: t.Number(),
-  scratchteam: t.Number(),
-  email: t.String({ format: "email" }),
-  password: t.String(),
-  gender: t.String(),
-  joined: t.Number(),
-  status: t.String(),
-  bio: t.String(),
-  country: t.String(),
-  icon: t.Union([t.Uint8Array(), t.String()]),
-});
+export interface DBUser {
+  id: number;
+  name: string;
+  birth_month: number;
+  birth_year: number;
+  scratchteam: 0 | 1;
+  email: string;
+  password: string;
+  joined: number;
+  status: string;
+  bio: string;
+  country: string;
+  icon: Uint8Array;
+}
 
 export const userSchema = t.Object({
   id: t.Number({ description: "ユーザーID" }),
@@ -50,20 +49,22 @@ export const userSchema = t.Object({
   })
 });
 
-export const getUser = (name: string): typeof DBUserSchema.static | null => {
-  const users = database.prepare("SELECT * FROM users WHERE name = ?").all(name);
-  if(!users.length) return null;
-  return DBUserSchema.parse(users[0]);
+const userQuery = database.query("SELECT * FROM users WHERE name = ?");
+
+export const getUser = (name: string): DBUser | null => {
+  const user = userQuery.get(name);
+  return user ?? null as any;
 }
 
-export const getUserWithID = (id: number): typeof DBUserSchema.static | null => {
-  const users = database.query("SELECT * FROM users WHERE id = ?").all(id);
-  if(!users.length) return null;
-  return DBUserSchema.parse(users[0]);
+const userIDQuery = database.query("SELECT * FROM users WHERE id = ?");
+
+export const getUserWithID = (id: number): DBUser | null => {
+  const user = userIDQuery.get(id);
+  return user ?? null as any;
 }
 
 export const deriveSigninedUser = async ({ cookie, headers, jwt }: ElysiaContext): Promise<{
-  user?: typeof DBUserSchema.static | null
+  user?: DBUser | null
 }> => {
   const key = cookie["scratchsessionid"].value ?? headers["X-Token"];
   if(!key) return {};
