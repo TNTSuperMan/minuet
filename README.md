@@ -7,7 +7,7 @@
 > そのため、このプログラムの使用は教育・研究・個人利用に留めてください。  
 > Therefore, this program should be used only for educational, research, and personal use.
 
-# scratch-replica
+# replicat
 ScratchのウェブサイトをHonoで模倣しています。  
 多分オフラインでも動きます。
 
