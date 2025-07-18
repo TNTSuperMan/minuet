@@ -1,5 +1,5 @@
 {
-  "name": "scratch-replica",
+  "name": "replicat",
   "scripts": {
     "dev": "bun run --hot src/index.ts"
   },
