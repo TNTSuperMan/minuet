@@ -1,19 +1,19 @@
-import { t } from "elysia"
-import { DBUser, getImages, imagesSchema } from "../../../utils/user"
-import { DBProject } from "../../../utils/project"
+import { t } from "elysia";
+import { DBUser, getImages, imagesSchema } from "../../../utils/user";
+import { DBProject } from "../../../utils/project";
 
 export const projectDataSchema = t.Object({
   author: t.Object({
     history: t.Object({
-      joined: t.String({ format: "date-time", description: "ユーザーの参加日" })
+      joined: t.String({ format: "date-time", description: "ユーザーの参加日" }),
     }),
     id: t.Number({ description: "ユーザーID" }),
     profile: t.Object({
       id: t.Nullable(t.Number({ description: "プロファイルID(?)" })),
-      images: imagesSchema
+      images: imagesSchema,
     }),
     scratchteam: t.Boolean({ description: "Scratchチームかどうか" }),
-    username: t.String({ description: "ユーザー名" })
+    username: t.String({ description: "ユーザー名" }),
   }),
   comments_allowed: t.Boolean({ description: "コメントが許可されているか" }),
   description: t.String({ description: "メモとクレジット" }),
@@ -24,14 +24,17 @@ export const projectDataSchema = t.Object({
   }),
   id: t.Number({ description: "プロジェクトID" }),
   image: t.String({ format: "uri", description: "サムネイルURL" }),
-  images: t.Object({
-    "100x80": t.String({ format: "uri" }),
-    "135x102": t.String({ format: "uri" }),
-    "144x108": t.String({ format: "uri" }),
-    "200x200": t.String({ format: "uri" }),
-    "216x163": t.String({ format: "uri" }),
-    "282x218": t.String({ format: "uri" }),
-  }, { description: "サイズごとのサムネイル" }),
+  images: t.Object(
+    {
+      "100x80": t.String({ format: "uri" }),
+      "135x102": t.String({ format: "uri" }),
+      "144x108": t.String({ format: "uri" }),
+      "200x200": t.String({ format: "uri" }),
+      "216x163": t.String({ format: "uri" }),
+      "282x218": t.String({ format: "uri" }),
+    },
+    { description: "サイズごとのサムネイル" }
+  ),
   instructions: t.String({ description: "使い方" }),
   is_published: t.Boolean({ description: "プロジェクトが公開されているか" }),
   project_token: t.String({ description: "プロジェクトのアクセストークン" }),
@@ -44,13 +47,17 @@ export const projectDataSchema = t.Object({
     views: t.Number({ description: "参照数" }),
     loves: t.Number({ description: "好き数" }),
     favorites: t.Number({ description: "お気に入り数" }),
-    remixes: t.Number({ description: "リミックス数" })
+    remixes: t.Number({ description: "リミックス数" }),
   }),
   title: t.String({ description: "タイトル" }),
-  visibility: t.String({ description: "可視かどうか(visibleだけか?)" })
-})
+  visibility: t.String({ description: "可視かどうか(visibleだけか?)" }),
+});
 
-export const getProjectData = (proj: DBProject, author: DBUser, token: string): typeof projectDataSchema.static => ({
+export const getProjectData = (
+  proj: DBProject,
+  author: DBUser,
+  token: string
+): typeof projectDataSchema.static => ({
   author: {
     history: {
       joined: new Date(author.joined).toISOString(),
@@ -61,7 +68,7 @@ export const getProjectData = (proj: DBProject, author: DBUser, token: string): 
       images: getImages(author.id),
     },
     scratchteam: author.scratchteam !== 0,
-    username: author.name
+    username: author.name,
   },
   comments_allowed: proj.comments_allowed !== 0,
   description: proj.description,
@@ -88,12 +95,13 @@ export const getProjectData = (proj: DBProject, author: DBUser, token: string): 
     parent: proj.parent,
     root: proj.parent, // TODO: ここを修正して
   },
-  stats: { // TODO: そういう機能ができたら実装
+  stats: {
+    // TODO: そういう機能ができたら実装
     views: 1,
     loves: 0,
     favorites: 0,
     remixes: 0,
   },
   title: proj.title,
-  visibility: "visible"
-})
+  visibility: "visible",
+});

@@ -7,7 +7,7 @@ const responseSchema = t.Union([
       gallery_comments_enabled: t.Boolean(),
       project_comments_enabled: t.Boolean(),
       userprofile_comments_enabled: t.Boolean(),
-    })
+    }),
   }),
   t.Object({
     flags: t.Object({
@@ -45,63 +45,67 @@ const responseSchema = t.Union([
       should_vpn: t.Boolean(),
       thumbnailUrl: t.String().url().describe("アイコンURL"),
       token: t.String().describe("アクセストークン"),
-      username: t.String().describe("ユーザー名")
-    })
-  })
-])
+      username: t.String().describe("ユーザー名"),
+    }),
+  }),
+]);
 
 const no_signin_response: typeof responseSchema.static = {
   flags: {
     gallery_comments_enabled: true,
     project_comments_enabled: true,
-    userprofile_comments_enabled: true
-  }
+    userprofile_comments_enabled: true,
+  },
 };
 
-app.get("/session/", ({ user, cookie }) => {
-  if(!user) return no_signin_response;
+app.get(
+  "/session/",
+  ({ user, cookie }) => {
+    if (!user) return no_signin_response;
 
-  const response: typeof responseSchema.static = {
-    flags: {
-      confirm_email_banner: false,
-      everything_is_totally_normal: false,
-      gallery_comments_enabled: true,
-      has_outstanding_email_confirmation: false,
-      must_complete_registration: false,
-      must_reset_password: false,
-      project_comments_enabled: true,
-      show_welcome: true,
-      unsupported_browser_banner: false,
-      userprofile_comments_enabled: true,
-      with_parent_email: false
-    },
-    permissions: {
-      admin: false,
-      educator: false,
-      educator_invitee: false,
-      invited_scratcher: false,
-      mute_status: {},
-      new_scratcher: true,
-      scratcher: true,
-      social: true,
-      student: false,
-    },
-    user: {
-      banned: false,
-      birthMonth: user.birth_month,
-      birthYear: user.birth_year,
-      dateJoined: new Date(user.joined).toISOString(),
-      email: user.email,
-      gender: user.gender,
-      id: user.id,
-      should_vpn: false,
-      thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
-      token: cookie.scratchsessionid.value!,
-      username: user.name
-    }
+    const response: typeof responseSchema.static = {
+      flags: {
+        confirm_email_banner: false,
+        everything_is_totally_normal: false,
+        gallery_comments_enabled: true,
+        has_outstanding_email_confirmation: false,
+        must_complete_registration: false,
+        must_reset_password: false,
+        project_comments_enabled: true,
+        show_welcome: true,
+        unsupported_browser_banner: false,
+        userprofile_comments_enabled: true,
+        with_parent_email: false,
+      },
+      permissions: {
+        admin: false,
+        educator: false,
+        educator_invitee: false,
+        invited_scratcher: false,
+        mute_status: {},
+        new_scratcher: true,
+        scratcher: true,
+        social: true,
+        student: false,
+      },
+      user: {
+        banned: false,
+        birthMonth: user.birth_month,
+        birthYear: user.birth_year,
+        dateJoined: new Date(user.joined).toISOString(),
+        email: user.email,
+        gender: user.gender,
+        id: user.id,
+        should_vpn: false,
+        thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
+        token: cookie.scratchsessionid.value!,
+        username: user.name,
+      },
+    };
+    return response;
+  },
+  {
+    detail: { summary: "セッション情報を返します" },
+    response: responseSchema,
   }
-  return response;
-}, {
-  detail: { summary: "セッション情報を返します" },
-  response: responseSchema
-})
+);

@@ -1,8 +1,7 @@
 import { createElysiaApp } from "../utils/app";
 
-const app = createElysiaApp("Assets API")
-.onError(({code, set, error})=>{
-  switch(code){
+const app = createElysiaApp("Assets API").onError(({ code, set, error }) => {
+  switch (code) {
     case "NOT_FOUND":
       set.status = 404;
       return "404 Not Found";
@@ -11,9 +10,9 @@ const app = createElysiaApp("Assets API")
       set.status = 500;
       return {
         code: "InternalServerError",
-        message: "Internal server error occurred"
-      }
+        message: "Internal server error occurred",
+      };
   }
 });
 
-export default app
+export default app;

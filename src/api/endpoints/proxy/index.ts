@@ -1,2 +1,2 @@
 import "./projects";
-import "./featured"
+import "./featured";

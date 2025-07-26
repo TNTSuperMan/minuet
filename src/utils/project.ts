@@ -3,7 +3,7 @@ import { database } from "./db";
 export interface DBProject {
   id: number;
   author: number;
-  
+
   created: number;
   modified: number;
   shared: number | null;
@@ -24,5 +24,5 @@ const projectQuery = database.query("SELECT * FROM projects WHERE id = ?");
 
 export const getProject = (id: number): DBProject | null => {
   const projects = projectQuery.get(id);
-  return projects ?? null as any;
-}
+  return projects ?? (null as any);
+};

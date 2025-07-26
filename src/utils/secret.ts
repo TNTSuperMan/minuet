@@ -1,7 +1,7 @@
 //@ts-ignore
 export const key = (await crypto.subtle.generateKey("Ed25519", true, ["sign", "verify"])) as {
-  publicKey: CryptoKey,
-  privateKey: CryptoKey
+  publicKey: CryptoKey;
+  privateKey: CryptoKey;
 };
 
 export const createExpire = (exp: number) => {
@@ -11,4 +11,4 @@ export const createExpire = (exp: number) => {
     iat: now,
     nbf: now,
   };
-}
+};

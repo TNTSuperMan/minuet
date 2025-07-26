@@ -3,6 +3,4 @@ import { getProjectPlugin } from "./get";
 import { putProjectPlugin } from "./put";
 import "./remixes";
 
-app.group("/projects", app => app
-  .use(getProjectPlugin)
-  .use(putProjectPlugin));
+app.group("/projects", (app) => app.use(getProjectPlugin).use(putProjectPlugin));

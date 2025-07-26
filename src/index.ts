@@ -7,8 +7,8 @@ import astApp from "./ast";
 
 const listen = (app: Elysia<any, any>, name: string, port: number) => {
   app.listen(port);
-console.log(`${name} server is running at http://localhost:${port}`);
-}
+  console.log(`${name} server is running at http://localhost:${port}`);
+};
 
 listen(apiApp, "API", 4519);
 listen(wwwApp, "WWW", 4517);
