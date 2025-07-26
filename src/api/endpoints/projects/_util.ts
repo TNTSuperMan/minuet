@@ -1,57 +1,56 @@
-import { DBProjectSchema } from "../../../utils/project"
-import { genToken } from "../../../utils/secret"
-import { DBUserSchema, getImages, imagesSchema } from "../../../utils/user"
-import { z } from "@hono/zod-openapi"
+import { t } from "elysia"
+import { DBUser, getImages, imagesSchema } from "../../../utils/user"
+import { DBProject } from "../../../utils/project"
 
-export const projectDataSchema = z.object({
-  author: z.object({
-    history: z.object({
-      joined: z.string().datetime().describe("ユーザーの参加日")
+export const projectDataSchema = t.Object({
+  author: t.Object({
+    history: t.Object({
+      joined: t.String({ format: "date-time", description: "ユーザーの参加日" })
     }),
-    id: z.number().describe("ユーザーID"),
-    profile: z.object({
-      id: z.number().nullable().describe("プロファイルID(?)"),
+    id: t.Number({ description: "ユーザーID" }),
+    profile: t.Object({
+      id: t.Nullable(t.Number({ description: "プロファイルID(?)" })),
       images: imagesSchema
     }),
-    scratchteam: z.boolean().describe("Scratchチームかどうか"),
-    username: z.string().describe("ユーザー名")
+    scratchteam: t.Boolean({ description: "Scratchチームかどうか" }),
+    username: t.String({ description: "ユーザー名" })
   }),
-  comments_allowed: z.boolean().describe("コメントが許可されているか"),
-  description: z.string().describe("メモとクレジット"),
-  history: z.object({
-    created: z.string().datetime().describe("作成日時"),
-    modified: z.string().datetime().describe("編集日時"),
-    shared: z.string().datetime().nullable().describe("共有日時"),
+  comments_allowed: t.Boolean({ description: "コメントが許可されているか" }),
+  description: t.String({ description: "メモとクレジット" }),
+  history: t.Object({
+    created: t.String({ format: "date-time", description: "作成日時" }),
+    modified: t.String({ format: "date-time", description: "編集日時" }),
+    shared: t.Nullable(t.String({ format: "date-time", description: "共有日時" })),
   }),
-  id: z.number().describe("プロジェクトID"),
-  image: z.string().url().describe("サムネイルURL"),
-  images: z.object({
-    "100x80": z.string().url(),
-    "135x102": z.string().url(),
-    "144x108": z.string().url(),
-    "200x200": z.string().url(),
-    "216x163": z.string().url(),
-    "282x218": z.string().url(),
-  }).describe("サイズごとのサムネイル"),
-  instructions: z.string().describe("使い方"),
-  is_published: z.boolean().describe("プロジェクトが公開されているか"),
-  project_token: z.string().describe("プロジェクトのアクセストークン"),
-  public: z.boolean().describe("プロジェクトが公開されているか"),
-  remix: z.object({
-    parent: z.number().nullable().describe("リミックス元のID"),
-    root: z.number().nullable().describe("リミックスの大本のID"),
+  id: t.Number({ description: "プロジェクトID" }),
+  image: t.String({ format: "uri", description: "サムネイルURL" }),
+  images: t.Object({
+    "100x80": t.String({ format: "uri" }),
+    "135x102": t.String({ format: "uri" }),
+    "144x108": t.String({ format: "uri" }),
+    "200x200": t.String({ format: "uri" }),
+    "216x163": t.String({ format: "uri" }),
+    "282x218": t.String({ format: "uri" }),
+  }, { description: "サイズごとのサムネイル" }),
+  instructions: t.String({ description: "使い方" }),
+  is_published: t.Boolean({ description: "プロジェクトが公開されているか" }),
+  project_token: t.String({ description: "プロジェクトのアクセストークン" }),
+  public: t.Boolean({ description: "プロジェクトが公開されているか" }),
+  remix: t.Object({
+    parent: t.Nullable(t.Number({ description: "リミックス元のID" })),
+    root: t.Nullable(t.Number({ description: "リミックスの大本のID" })),
   }),
-  stats: z.object({
-    views: z.number().describe("参照数"),
-    loves: z.number().describe("好き数"),
-    favorites: z.number().describe("お気に入り数"),
-    remixes: z.number().describe("リミックス数")
+  stats: t.Object({
+    views: t.Number({ description: "参照数" }),
+    loves: t.Number({ description: "好き数" }),
+    favorites: t.Number({ description: "お気に入り数" }),
+    remixes: t.Number({ description: "リミックス数" })
   }),
-  title: z.string().describe("タイトル"),
-  visibility: z.string().describe("可視かどうか(visibleだけか?)")
+  title: t.String({ description: "タイトル" }),
+  visibility: t.String({ description: "可視かどうか(visibleだけか?)" })
 })
 
-export const getProjectData = async (proj: z.infer<typeof DBProjectSchema>, author: z.infer<typeof DBUserSchema>): Promise<z.infer<typeof projectDataSchema>> => ({
+export const getProjectData = (proj: DBProject, author: DBUser, token: string): typeof projectDataSchema.static => ({
   author: {
     history: {
       joined: new Date(author.joined).toISOString(),
@@ -83,9 +82,7 @@ export const getProjectData = async (proj: z.infer<typeof DBProjectSchema>, auth
   },
   instructions: proj.instructions,
   is_published: proj.public != 0,
-  project_token: await genToken({
-    id: proj.id,
-  }, 60 * 5),
+  project_token: token,
   public: proj.public != 0,
   remix: {
     parent: proj.parent,
