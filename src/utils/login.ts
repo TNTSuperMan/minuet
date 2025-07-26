@@ -1,6 +1,6 @@
 import { password, randomUUIDv7 } from "bun";
 import { createExpire } from "./secret";
-import { DBUserSchema, getUser } from "./user";
+import { DBUser, getUser } from "./user";
 import { ElysiaContext } from "./app";
 
 export const login = async (
@@ -17,7 +17,7 @@ export const login = async (
   | {
       type: "success";
       token: string;
-      info: typeof DBUserSchema.static;
+      info: DBUser;
     }
 > => {
   const user = getUser(name);
