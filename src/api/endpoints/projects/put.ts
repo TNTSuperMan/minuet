@@ -1,46 +1,17 @@
-import { HTTPException } from "hono/http-exception";
 import { getProject } from "../../../utils/project";
-import { getSigninedUser } from "../../../utils/user";
-import app from "../../app";
-import { z } from "@hono/zod-openapi";
 import { database } from "../../../utils/db";
 import { getProjectData, projectDataSchema } from "./_util";
+import { ElysiaApp } from "../../../utils/app";
+import { t } from "elysia";
+import { createExpire } from "../../../utils/secret";
 
-app.openapi({
-  path: "/projects/:id", method: "put",
-  description: "プロジェクトのタイトルを変更",
-  request: {
-    params: z.object({
-      id: z.string().regex(/^\d+$/).describe("プロジェクトID")
-    }),
-    body: {
-      content: {
-        "application/json": {
-          schema: z.object({
-            title: z.string().optional().describe("タイトル"),
-            description: z.string().optional().describe("メモとクレジット"),
-            instructions: z.string().optional().describe("使い方"),
-          })
-        }
-      }
-    }
-  },
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "application/json": {
-          schema: projectDataSchema
-        }
-      }
-    }
+export const putProjectPlugin = (app: ElysiaApp) =>
+app.put("/:id", async ({ user, set, body, params: { id }, jwt }) => {
+  const proj = getProject(parseInt(id));
+  if(!proj || !user || proj.author !== user.id) {
+    set.status = 403;
+    return "403 Forbidden";
   }
-}, async c => {
-  const proj = getProject(parseInt(c.req.valid("param").id));
-  const user = await getSigninedUser(c);
-  if(!proj || !user || proj.author !== user.id) throw new HTTPException(403);
-
-  const body = c.req.valid("json");
 
   database.query(
     "UPDATE projects SET title = ?, description = ?, instructions = ? WHERE id = ?"
@@ -50,5 +21,23 @@ app.openapi({
     body.instructions ?? proj.instructions,
   proj.id);
 
-  return c.json(await getProjectData(proj, user));
+  return await getProjectData(proj, user, await jwt.sign({
+    ...createExpire(60 * 5),
+    project: proj.id,
+    user: user.name,
+  }));
+}, {
+  detail: { summary: "プロジェクトのタイトル等を変更します" },
+  params: t.Object({
+    id: t.String({ format: "regex", pattern: "^\\d+$", description: "プロジェクトID" })
+  }),
+  body: t.Object({
+    title: t.Optional(t.String({ description: "タイトル" })),
+    description: t.Optional(t.String({ description: "メモとクレジット" })),
+    instructions: t.Optional(t.String({ description: "使い方" }))
+  }),
+  response: {
+    403: t.String({ description: "403の旨" }),
+    200: projectDataSchema
+  }
 })
