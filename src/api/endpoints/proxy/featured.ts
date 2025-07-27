@@ -1,72 +1,66 @@
-import app from "../../app";
-import { z } from "@hono/zod-openapi";
+import { t } from "elysia";
+import { ElysiaApp } from "../../../utils/app";
 
-const project = {
-  creator: z.string().describe("プロジェクトの作者名"),
-  id: z.number().describe("プロジェクトのID"),
-  thumbnail_url: z.string().url().describe("プロジェクトのサムネイルURL"),
-  title: z.string().describe("プロジェクトタイトル"),
-  love_count: z.number().describe("ハート数"),
-  type: z.string().describe('"project"という文字列'),
-} as const;
+const project = t.Object({
+  creator: t.String({ description: "プロジェクトの作者名" }),
+  id: t.Number({ description: "プロジェクトのID" }),
+  thumbnail_url: t.String({ format: "uri", description: "プロジェクトのサムネイルURL" }),
+  title: t.String({ description: "プロジェクトタイトル" }),
+  love_count: t.Number({ description: "ハート数" }),
+  type: t.String({ description: '"project"という文字列' }),
+});
 
-app.openapi(
-  {
-    path: "/proxy/featured",
-    method: "get",
-    description: "ホームに出るプロジェクトとかの情報を返します",
-    responses: {
-      200: {
-        description: "おｋ",
-        content: {
-          "application/json": {
-            schema: z.object({
-              community_featured_projects: z.array(z.object(project)),
-              community_featured_studios: z.array(
-                z.object({
-                  id: z.number().describe("スタジオID"),
-                  thumbnail_url: z.string().url().describe("スタジオのサムネイルURL"),
-                  title: z.string().describe("スタジオのタイトル"),
-                  type: z.string().describe('"gallery"という文字列'),
-                })
-              ),
-              community_most_loved_projects: z.array(z.object(project)),
-              community_most_remixed_projects: z.array(
-                z.object({
-                  ...project,
-                  remixers_count: z.number().describe("リミックス数"),
-                })
-              ),
-              community_newest_projects: z.array(z.object(project)),
-              curator_top_projects: z.array(z.object(project)),
-              scratch_design_studio: z.array(
-                z.object({
-                  creator: z.string().describe("作者"),
-                  gallery_id: z.number().describe("スタジオID"),
-                  gallery_title: z.string().describe("スタジオのタイトル"),
-                  id: z.number().describe("プロジェクトID"),
-                  love_count: z.number().describe("ハート数"),
-                  thumbnail_url: z.string().url().describe("サムネイルURL"),
-                  title: z.string().describe("プロジェクトのタイトル"),
-                  type: z.string().describe('"project"という文字列'),
-                })
-              ),
-            }),
-          },
-        },
-      },
+const featuredResponse = t.Object({
+  community_featured_projects: t.Array(project),
+  community_featured_studios: t.Array(
+    t.Object({
+      id: t.Number({ description: "スタジオID" }),
+      thumbnail_url: t.String({ format: "uri", description: "スタジオのサムネイルURL" }),
+      title: t.String({ description: "スタジオのタイトル" }),
+      type: t.String({ description: '"gallery"という文字列' }),
+    })
+  ),
+  community_most_loved_projects: t.Array(project),
+  community_most_remixed_projects: t.Array(
+    t.Intersect([
+      project,
+      t.Object({
+        remixers_count: t.Number({ description: "リミックス数" }),
+      }),
+    ])
+  ),
+  community_newest_projects: t.Array(project),
+  curator_top_projects: t.Array(project),
+  scratch_design_studio: t.Array(
+    t.Object({
+      creator: t.String({ description: "作者" }),
+      gallery_id: t.Number({ description: "スタジオID" }),
+      gallery_title: t.String({ description: "スタジオのタイトル" }),
+      id: t.Number({ description: "プロジェクトID" }),
+      love_count: t.Number({ description: "ハート数" }),
+      thumbnail_url: t.String({ format: "uri", description: "サムネイルURL" }),
+      title: t.String({ description: "プロジェクトのタイトル" }),
+      type: t.String({ description: '"project"という文字列' }),
+    })
+  ),
+});
+
+export const proxyFeaturedPlugin = (app: ElysiaApp) =>
+  app.get(
+    "/proxy/featured",
+    async () => {
+      return {
+        community_featured_projects: [],
+        community_featured_studios: [],
+        community_most_loved_projects: [],
+        community_most_remixed_projects: [],
+        community_newest_projects: [],
+        curator_top_projects: [],
+        scratch_design_studio: [],
+      };
     },
-  },
-  async (c) => {
-    // TODO: ちゃんとした実装にする
-    return c.json({
-      community_featured_projects: [],
-      community_featured_studios: [],
-      community_most_loved_projects: [],
-      community_most_remixed_projects: [],
-      community_newest_projects: [],
-      curator_top_projects: [],
-      scratch_design_studio: [],
-    });
-  }
-);
+    {
+      detail: { summary: "ホームに出るプロジェクトとかの情報を返します" },
+      response: featuredResponse,
+    }
+  );
