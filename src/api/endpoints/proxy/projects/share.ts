@@ -20,7 +20,7 @@ export const proxyShareProjectRoutes = (app: ElysiaApp) =>
       return { is_published: "true" as const };
     },
     {
-      detail: { summary: "プロジェクトを共有します。" },
+      detail: { summary: "プロジェクトを共有します" },
       params: t.Object({
         id: t.String({ pattern: "^\\d+$", description: "プロジェクトID" }),
       }),
