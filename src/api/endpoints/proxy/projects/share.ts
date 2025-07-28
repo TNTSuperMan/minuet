@@ -1,55 +1,40 @@
+import { t } from "elysia";
 import { getProject } from "../../../../utils/project";
-import app from "../../../app";
-import { z } from "@hono/zod-openapi";
-import { getSigninedUser } from "../../../../utils/user";
-import { HTTPException } from "hono/http-exception";
 import { database } from "../../../../utils/db";
-import { key } from "../../../../utils/secret";
-import { verify } from "hono/jwt";
-import { deleteCookie } from "hono/cookie";
+import { ElysiaApp } from "../../../../utils/app";
+import { verifyCSRF } from "../../../../utils/csrf";
 
-app.openapi(
-  {
-    path: "/proxy/projects/{id}/share",
-    method: "put",
-    description: "プロジェクトを共有します。",
-    request: {
-      params: z.object({
-        id: z.string().regex(/^\d+$/).describe("プロジェクトID"),
-      }),
-      headers: z.object({
-        "X-csrftoken": z.string().describe("CSRFトークン"),
-      }),
+export const proxyShareProjectPlugin = (app: ElysiaApp) =>
+  app.use(verifyCSRF()).put(
+    "/proxy/projects/:id/share",
+    async ({ params: { id }, user, set }) => {
+      const proj = getProject(parseInt(id));
+
+      if (!proj || !user || proj.author !== user.id) {
+        set.status = 403;
+        return "403 Forbidden";
+      }
+
+      database.query("UPDATE projects SET public = 1 WHERE id = ?").get(proj.id);
+
+      return { is_published: "true" as const };
     },
-    responses: {
-      200: {
-        description: "おｋ",
-        content: {
-          "application/json": {
-            schema: z.object({
-              is_published: z.enum(["true", "false"]).describe("公開されたか"),
-            }),
-          },
-        },
+    {
+      detail: { summary: "プロジェクトを共有します。" },
+      params: t.Object({
+        id: t.String({ pattern: "^\\d+$", description: "プロジェクトID" }),
+      }),
+      headers: t.Object({
+        "x-csrftoken": t.String({ description: "CSRFトークン" }),
+      }),
+      response: {
+        200: t.Object({
+          is_published: t.Union([
+            t.Literal("true", { description: "公開されたか" }),
+            t.Literal("false", { description: "公開されていない" }),
+          ]),
+        }),
+        403: t.String({ description: "403である旨" }),
       },
-    },
-  },
-  async (c) => {
-    const headers = c.req.valid("header");
-    try {
-      await verify(headers["X-csrftoken"], key.publicKey, "EdDSA");
-    } catch {
-      deleteCookie(c, "scratchcsrftoken");
-      throw new HTTPException(403);
     }
-
-    const proj = getProject(parseInt(c.req.valid("param").id));
-    const user = await getSigninedUser(c);
-
-    if (!proj || !user || proj.author !== user.id) throw new HTTPException(403);
-
-    database.query("UPDATE projects SET public = 1 WHERE id = ?").get(proj.id);
-
-    return c.json({ is_published: "true" as const });
-  }
-);
+  );
