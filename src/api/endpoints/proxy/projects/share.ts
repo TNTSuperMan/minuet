@@ -4,7 +4,7 @@ import { database } from "../../../../utils/db";
 import { ElysiaApp } from "../../../../utils/app";
 import { verifyCSRF } from "../../../../utils/csrf";
 
-export const proxyShareProjectPlugin = (app: ElysiaApp) =>
+export const proxyShareProjectRoutes = (app: ElysiaApp) =>
   app.use(verifyCSRF()).put(
     "/proxy/projects/:id/share",
     async ({ params: { id }, user, set }) => {

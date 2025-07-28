@@ -5,7 +5,7 @@ import { getProjectData, projectDataSchema } from "./_util";
 import { getUserWithID } from "../../../utils/user";
 import { createExpire } from "../../../utils/secret";
 
-export const getProjectPlugin = (app: ElysiaApp) =>
+export const getProjectRoutes = (app: ElysiaApp) =>
   app.get(
     "/:id",
     async ({ params: { id }, user, jwt }) => {

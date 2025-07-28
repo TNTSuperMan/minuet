@@ -1,5 +1,5 @@
 import { ElysiaApp } from "../../../../utils/app";
-import { proxyShareProjectPlugin } from "./share";
+import { proxyShareProjectRoutes } from "./share";
 
-export const proxyProjectsPlugin = (app: ElysiaApp) =>
-  app.group("/projects", (app) => app.use(proxyShareProjectPlugin));
+export const proxyProjectsRoutes = (app: ElysiaApp) =>
+  app.group("/projects", (app) => app.use(proxyShareProjectRoutes));

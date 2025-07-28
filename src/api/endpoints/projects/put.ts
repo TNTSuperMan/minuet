@@ -5,7 +5,7 @@ import { ElysiaApp } from "../../../utils/app";
 import { t } from "elysia";
 import { createExpire } from "../../../utils/secret";
 
-export const putProjectPlugin = (app: ElysiaApp) =>
+export const putProjectRoutes = (app: ElysiaApp) =>
   app.put(
     "/:id",
     async ({ user, set, body, params: { id }, jwt }) => {

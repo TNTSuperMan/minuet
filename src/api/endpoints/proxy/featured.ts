@@ -45,7 +45,7 @@ const featuredResponse = t.Object({
   ),
 });
 
-export const proxyFeaturedPlugin = (app: ElysiaApp) =>
+export const proxyFeaturedRoutes = (app: ElysiaApp) =>
   app.get(
     "/proxy/featured",
     async () => {

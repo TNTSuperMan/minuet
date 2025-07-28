@@ -2,7 +2,7 @@ import { t } from "elysia";
 import { projectDataSchema } from "./_util";
 import { ElysiaApp } from "../../../utils/app";
 
-export const projectsRemixesPlugin = (app: ElysiaApp) =>
+export const projectsRemixesRoutes = (app: ElysiaApp) =>
   app.get(
     "/:id/remixes",
     () => ({}), // いつか実装する

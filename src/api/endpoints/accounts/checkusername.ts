@@ -16,7 +16,7 @@ export const validateUsername = (
   else return "valid username";
 };
 
-export const checkUsernamePlugin = (app: ElysiaApp) =>
+export const checkUsernameRoutes = (app: ElysiaApp) =>
   app.get(
     "/checkusername/:username/",
     ({ params: { username } }) => ({ username, msg: validateUsername(username) }),

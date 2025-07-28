@@ -8,7 +8,7 @@ export const isValidPassword = (password: string) =>
   password !== "0123456789".substring(0, password.length) && // 012...のような文字の判定
   password !== "abcdefghijklmnopqrstuvwxyz".substring(0, password.length); // abc...のような文字の判定
 
-export const checkPasswordPlugin = (app: ElysiaApp) =>
+export const checkPasswordRoutes = (app: ElysiaApp) =>
   app.post(
     "/checkpassword",
     ({ body: { password } }) => ({
