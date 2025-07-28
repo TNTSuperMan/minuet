@@ -1,8 +1,9 @@
-import app from "../../app";
+import { ElysiaApp } from "../../../utils/app";
 import { getProjectPlugin } from "./get";
 import { putProjectPlugin } from "./put";
 import { projectsRemixesPlugin } from "./remixes";
 
-app.group("/projects", (app) =>
-  app.use(getProjectPlugin).use(putProjectPlugin).use(projectsRemixesPlugin)
-);
+export const projectsPlugin = (app: ElysiaApp) =>
+  app.group("/projects", (app) =>
+    app.use(getProjectPlugin).use(putProjectPlugin).use(projectsRemixesPlugin)
+  );
