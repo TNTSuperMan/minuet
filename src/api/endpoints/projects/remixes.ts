@@ -5,7 +5,7 @@ import { ElysiaApp } from "../../../utils/app";
 export const projectsRemixesRoutes = (app: ElysiaApp) =>
   app.get(
     "/:id/remixes",
-    () => ({}), // いつか実装する
+    () => [], // いつか実装する
     {
       detail: { summary: "プロジェクトのリミックスリストを取得します" },
       query: t.Object({
