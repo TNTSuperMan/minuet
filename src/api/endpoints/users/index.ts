@@ -1,6 +1,8 @@
+import { ElysiaApp, ElysiaAppRoute } from "../../../utils/app";
 import { getImages, getUser, userSchema } from "../../../utils/user";
-import { ElysiaApp } from "../../../utils/app";
 import { NotFoundError, t } from "elysia";
+
+export type UserElysiaApp = ElysiaAppRoute<"/users/:usr", ElysiaApp>;
 
 export const userRoutes = (app: ElysiaApp) =>
   app.group("/users/:usr", (app) =>
