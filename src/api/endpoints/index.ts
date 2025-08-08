@@ -4,14 +4,14 @@ import { accountsRoutes } from "./accounts";
 import { newsRoutes } from "./news";
 import { projectsRoutes } from "./projects";
 import { proxyRoutes } from "./proxy";
-
-//import "./users";
+import { userRoutes } from "./users";
 
 app
   .use(accountsRoutes)
   .use(newsRoutes)
   .use(projectsRoutes)
   .use(proxyRoutes)
+  .use(userRoutes)
   .get(
     "/",
     () => ({
