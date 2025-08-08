@@ -9,7 +9,7 @@ export const isValidEmail = (email: string) => {
   return true;
 };
 
-export const useCheckEmailPlugin = (app: ElysiaApp) =>
+export const checkEmailRoutes = (app: ElysiaApp) =>
   app.get(
     "/check_email/",
     ({ query: { email } }) => ({
