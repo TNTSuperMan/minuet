@@ -4,7 +4,6 @@ import { DBUser, getUser } from "./user";
 import { ElysiaContext } from "./app";
 
 export const login = async (
-  { cookie, jwt }: ElysiaContext,
   name: string,
   pass: string
 ): Promise<
@@ -16,7 +15,6 @@ export const login = async (
     }
   | {
       type: "success";
-      token: string;
       info: DBUser;
     }
 > => {
@@ -24,17 +22,8 @@ export const login = async (
   if (!user) return { type: "notFound" };
   if (!(await password.verify(pass, user.password))) return { type: "invalidPass" };
 
-  const token = await jwt.sign({
-    jti: randomUUIDv7(),
-    aud: user.name,
-    ...createExpire(14 * 24 * 60 * 60),
-  });
-
-  cookie["scratchsessionid"].value = token;
-
   return {
     type: "success",
-    token,
     info: user,
   };
 };
