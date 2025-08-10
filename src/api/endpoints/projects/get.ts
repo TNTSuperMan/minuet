@@ -19,7 +19,7 @@ export const getProjectRoutes = (app: ElysiaApp) =>
         getUserWithID(proj.author)!,
         await jwt.sign({
           ...createExpire(60 * 5),
-          project: proj.id,
+          id: proj.id,
         })
       );
     },
