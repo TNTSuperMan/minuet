@@ -4,11 +4,13 @@ import { createElysiaApp } from "../utils/app";
 const app = createElysiaApp("WWW").onError(async ({ code, set, error, route, redirect }) => {
   switch (code) {
     case "NOT_FOUND":
-      const www = await handleWWW(route);
-      if (www) return typeof www === "string" ? redirect(www) : www;
+      if(route){
+        const www = await handleWWW(route);
+        if (www) return typeof www === "string" ? redirect(www) : www;
 
-      set.status = 404;
-      set.headers["content-type"] = "text/html";
+        set.status = 404;
+        set.headers["content-type"] = "text/html";
+      }
       return '404<br><a href="/">ホーム</a>';
     case "INTERNAL_SERVER_ERROR":
       console.error(error);
