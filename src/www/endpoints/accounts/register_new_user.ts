@@ -1,74 +1,37 @@
-import { HTTPException } from "hono/http-exception";
+import { Elysia, t } from "elysia";
 import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
-import app from "../../app";
-import { z } from "@hono/zod-openapi";
 import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { database } from "../../../utils/db";
 import { password } from "bun";
-import { sign } from "hono/jwt";
-import { key } from "../../../utils/secret";
+import { createExpire, key } from "../../../utils/secret";
+import { ElysiaApp } from "../../../utils/app";
 
-const formdataSchema = z.object({
-  username: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  birth_month: z.string().regex(/^\d+$/),
-  birth_year: z.string().regex(/^\d+$/),
-  under_16: z.enum(["true", "false"]),
-  gender: z.string(),
-  country: z.string(),
+const formdataSchema = t.Object({
+  username: t.String(),
+  email: t.String({ format: "email" }),
+  password: t.String(),
+  birth_month: t.String({ pattern: "^\\d+$" }),
+  birth_year: t.String({ pattern: "^\\d+$" }),
+  under_16: t.Union([t.Literal("true"), t.Literal("false")]),
+  gender: t.String(),
+  country: t.String(),
 });
 
-const dbReturnSchema = z.object({
-  id: z.number(),
-});
+export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
+  app.post(
+    "/accounts/register_new_user/",
+    async ({ jwt, body, set }) => {
+      const usr_validate_res = validateUsername(body.username);
+      if (usr_validate_res !== "valid username") {
+        set.status = 400;
+        return [{ msg: "invalid username" }];
+      }
+      if (!isValidPassword(body.password)) {
+        set.status = 400;
+        return [{ msg: "invalid password" }];
+      }
 
-app.openapi(
-  {
-    path: "/accounts/register_new_user/",
-    method: "post",
-    description: "ユーザーを登録します",
-    request: {
-      body: {
-        content: {
-          "multipart/form-data": {
-            schema: formdataSchema,
-          },
-        },
-      },
-    },
-    responses: {
-      200: {
-        description: "おｋ",
-        content: {
-          "application/json": {
-            schema: z.array(
-              z.object({
-                username: z.string().describe("登録したユーザー名"),
-                user_id: z.number().describe("割り当てられたユーザーID"),
-                success: z.boolean().describe("成功したか"),
-                token: z.string().optional().describe("アクセストークン"),
-                msg: z.string().describe('メッセージ(正常の場合"user created")'),
-                logged_in: z
-                  .boolean()
-                  .describe("そのユーザーにログインしたか(wwwで使われてない気がする)"),
-              })
-            ),
-          },
-        },
-      },
-    },
-  },
-  async (c) => {
-    const body = formdataSchema.parse(await c.req.parseBody());
-    const usr_validate_res = validateUsername(body.username);
-    if (usr_validate_res !== "valid username")
-      throw new HTTPException(501, { message: "バリデーションが失敗したときの挙動はまだ☆" });
-    if (!isValidPassword(body.password))
-      throw new HTTPException(400, { message: "パスワードダメだお" });
-
-    const { id } = dbReturnSchema.parse(
-      database
+      const dbRes = database
         .query(
           `INSERT INTO users (
     name, birth_month, birth_year, scratchteam, email, password, gender, joined, status, bio, country
@@ -86,25 +49,41 @@ app.openapi(
           "",
           "",
           body.country
-        )
-    );
+        ) as { id: number };
 
-    return c.json([
-      {
-        username: body.username,
-        user_id: id,
-        success: true,
-        token: await sign(
-          {
+      return [
+        {
+          username: body.username,
+          user_id: dbRes.id,
+          success: true,
+          token: await jwt.sign({
+            ...createExpire(14 * 24 * 60 * 60),
             username: body.username,
-            exp: Math.floor(Date.now() / 1000) + 14 * 24 * 60 * 60,
-          },
-          key.privateKey,
-          "EdDSA"
-        ),
-        msg: "user created",
-        logged_in: true,
-      },
-    ]);
-  }
-);
+          }),
+          msg: "user created",
+          logged_in: true,
+        },
+      ];
+    },
+    {
+      detail: { summary: "ユーザーを登録します" },
+      body: formdataSchema,
+      response: t.Tuple([
+        t.Union([
+          t.Object({
+            username: t.String({ description: "登録したユーザー名" }),
+            user_id: t.Number({ description: "割り当てられたユーザーID" }),
+            success: t.Boolean({ description: "成功したか" }),
+            token: t.Optional(t.String({ description: "アクセストークン" })),
+            msg: t.String({ description: 'メッセージ(正常の場合"user created")' }),
+            logged_in: t.Boolean({
+              description: "そのユーザーにログインしたか(wwwで使われてない気がする)",
+            }),
+          }),
+          t.Object({
+            msg: t.String({ description: 'メッセージ(正常の場合"user created")' }),
+          }),
+        ]),
+      ]),
+    }
+  );
