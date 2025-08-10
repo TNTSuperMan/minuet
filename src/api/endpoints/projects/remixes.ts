@@ -1,23 +1,16 @@
-import app from "../../app";
-import { z } from "@hono/zod-openapi";
+import { t } from "elysia";
 import { projectDataSchema } from "./_util";
+import { ElysiaApp } from "../../../utils/app";
 
-app.openapi({
-  path: "/projects/{id}/remixes", method: "get",
-  description: "プロジェクトのリミックスリスト",
-  request: {
-    query: z.object({
-      limit: z.string().regex(/^\d+$/).describe("表示上限")
-    })
-  },
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "application/json": {
-          schema: z.array(projectDataSchema)
-        }
-      }
+export const projectsRemixesRoutes = (app: ElysiaApp) =>
+  app.get(
+    "/:id/remixes",
+    () => [], // いつか実装する
+    {
+      detail: { summary: "プロジェクトのリミックスリストを取得します" },
+      query: t.Object({
+        limit: t.String({ pattern: "^\\d+$", format: "regex", description: "表示上限" }),
+      }),
+      responses: t.Array(projectDataSchema),
     }
-  }
-}, c => c.json([]))
+  );

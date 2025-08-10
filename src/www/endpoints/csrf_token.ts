@@ -1,22 +1,19 @@
-import { setCookie } from "hono/cookie";
 import app from "../app";
-import { z } from "@hono/zod-openapi";
-import { genToken } from "../../utils/secret";
+import { createExpire } from "../../utils/secret";
+import { t } from "elysia";
+import { ElysiaApp } from "../../utils/app";
 
-app.openapi({
-  path: "/csrf_token/", method: "get",
-  description: "CSRFトークンを発行します",
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "text/plain": {
-          schema: z.string()
-        }
-      }
+const csrfTokenExpire = 365 * 24 * 60 * 60;
+
+export const csrfTokenRoutes = (app: ElysiaApp) =>
+  app.get(
+    "/csrf_token/",
+    async ({ cookie, jwt }) => {
+      cookie.scratchcsrftoken.value = await jwt.sign(createExpire(csrfTokenExpire));
+      return "";
+    },
+    {
+      detail: { summary: "CSRFトークンを発行します" },
+      response: t.String(),
     }
-  }
-}, async c => {
-  setCookie(c, "scratchcsrftoken", await genToken({}, 365*24*60*60));
-  return c.text("");
-})
+  );

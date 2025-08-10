@@ -1,18 +1,10 @@
-import { sign } from "hono/jwt";
-import { JWTPayload } from "hono/utils/jwt/types";
+export const key = await crypto.subtle.generateKey({ name: "HMAC", hash: "SHA-256" }, true, ["sign", "verify"]);
 
-//@ts-ignore
-export const key = (await crypto.subtle.generateKey("Ed25519", true, ["sign", "verify"])) as {
-  publicKey: CryptoKey,
-  privateKey: CryptoKey
-};
-
-export const genToken = (payload: JWTPayload, exp: number) => {
+export const createExpire = (exp: number) => {
   const now = Math.floor(Date.now() / 1000);
-  return sign({
-    ...payload,
+  return {
     exp: now + exp,
     iat: now,
     nbf: now,
-  }, key.privateKey, "EdDSA");
-}
+  };
+};

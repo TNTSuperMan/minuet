@@ -1,31 +1,20 @@
-import { swaggerUI } from "@hono/swagger-ui";
-import { OpenAPIHono } from "@hono/zod-openapi";
-import { HTTPException } from "hono/http-exception";
+import { WWWPageRoutes } from "./www";
+import { createElysiaApp } from "../utils/app";
 
-const app = new OpenAPIHono;
+const app = createElysiaApp("WWW")
+  .use(WWWPageRoutes)
+  .onError(async ({ code, set, error, route, redirect }) => {
+    switch (code) {
+      case "NOT_FOUND":
+        return '404<br><a href="/">ホーム</a>';
+      case "INTERNAL_SERVER_ERROR":
+        console.error(error);
+        set.status = 500;
+        return {
+          code: "InternalServerError",
+          message: "Internal server error occurred",
+        };
+    }
+  });
 
-app.doc("/spec", {
-  openapi: "3.0.0",
-  info: {
-    title: "WWW document",
-    version: "1.0.0"
-  }
-}).get("/docs", swaggerUI({
-  url: "/spec"
-}));
-
-app.onError((e,c)=>{
-  if(e instanceof HTTPException){
-    if(e.status === 404){
-      return c.html("404<br><a href=\"/\">ホーム</a>", 404);
-    }else return e.getResponse();
-  }else{
-    console.error(e);
-    return c.json({
-      code: "InternalServerError",
-      message: "Internal server error occurred"
-    })
-  }
-});
-
-export default app
+export default app;

@@ -1,39 +1,31 @@
-import app from "../../app";
-import { z } from "@hono/zod-openapi"
+import { t } from "elysia";
+import { ElysiaApp } from "../../../utils/app";
+
+const mailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
 export const isValidEmail = (email: string) => {
-  if(email.endsWith("@gmail.com")) return false;
+  if (!mailRegexp.test(email)) return false;
+  if (email.endsWith("@gmail.com")) return false;
   return true;
-}
+};
 
-app.openapi({
-  path: "/accounts/check_email/", method: "get",
-  description: "有効なメールアドレスかを返します",
-  request: {
-    query: z.object({
-      email: z.string().email().describe("確認するメールアドレス"),
-    })
-  },
-  responses: {
-    200: {
-      description: "おｋ",
-      content: {
-        "application/json": {
-          schema: z.array(z.object({
-            msg: z.string(),
-            email: z.string().email(),
-          }))
-        }
-      }
+export const checkEmailRoutes = (app: ElysiaApp) =>
+  app.get(
+    "/check_email/",
+    ({ query: { email } }) => ({
+      msg: isValidEmail(email)
+        ? "valid email"
+        : "このアドレスにメールを送ることが許可されていません。",
+      email,
+    }),
+    {
+      detail: { summary: "有効なメールアドレスかを返します" },
+      query: t.Object({
+        email: t.String({ format: "email" }),
+      }),
+      response: t.Object({
+        msg: t.String(),
+        email: t.String({ format: "email" }),
+      }),
     }
-  }
-}, c => {
-  const { email } = c.req.valid("query");
-  if(isValidEmail(email)) return c.json([{
-    msg: "valid email", email
-  }]);
-  else return c.json([{
-    msg: "Scratchではこのアドレスにメールを送ることが許可されていません。",
-    email
-  }]);
-})
+  );
