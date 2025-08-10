@@ -1,5 +1,5 @@
 //@ts-ignore
-export const key = (await crypto.subtle.generateKey("Ed25519", true, ["sign", "verify"])) as {
+export const key = (await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"])) as {
   publicKey: CryptoKey;
   privateKey: CryptoKey;
 };
