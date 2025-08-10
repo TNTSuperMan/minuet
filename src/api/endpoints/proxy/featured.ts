@@ -47,7 +47,7 @@ const featuredResponse = t.Object({
 
 export const proxyFeaturedRoutes = (app: ElysiaApp) =>
   app.get(
-    "/proxy/featured",
+    "/featured",
     async () => {
       return {
         community_featured_projects: [],
