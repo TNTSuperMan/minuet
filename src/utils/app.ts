@@ -43,7 +43,7 @@ export type ElysiaContext = InferContext<ReturnType<typeof createElysiaAppWithou
 const createElysiaAppWithoutDerives = (name: string) =>
   new Elysia()
     .use(swagger({ documentation: { info: { title: name + " document", version } } }))
-    .use(jwt({ name: "jwt", secret: key.privateKey, alg: "ES256" }))
+    .use(jwt({ name: "jwt", secret: key, alg: "HS256" }))
     .use(
       cors({
         origin: "http://localhost:4517",
