@@ -23,7 +23,7 @@ app.put("/:id", async ({ user, body, set, params: { id } }) => {
     "autosave-interval": "120" as const,
   };
 }, {
-  detail: { summary: "プロジェクトのJSONを返します" },
+  detail: { summary: "プロジェクトのJSONを更新します" },
   body: t.File({ type: "application/json" }),
   params: t.Object({
     id: t.String({ pattern: "^\\d+$", description: "プロジェクトID" }),
