@@ -1,4 +1,5 @@
-import app from "../../app";
+import { ElysiaApp } from "../../../utils/app";
 import { useProjectPlugin } from "./project";
 
-app.group("/internalapi", (app) => app.use(useProjectPlugin));
+export const internalAPIRoutes = (app: ElysiaApp) =>
+  app.group("/internalapi", (app) => app.use(useProjectPlugin));
