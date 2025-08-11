@@ -1,6 +1,7 @@
-import { database } from "../../utils/db";
 import { t } from "elysia";
+
 import { ElysiaApp } from "../../utils/app";
+import { database } from "../../utils/db";
 
 const newsQuery = database.query("SELECT * FROM news LIMIT ? OFFSET ?");
 

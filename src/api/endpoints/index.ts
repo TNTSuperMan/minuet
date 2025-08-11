@@ -1,5 +1,7 @@
-import app from "../app";
 import { t } from "elysia";
+
+import app from "../app";
+
 import { accountsRoutes } from "./accounts";
 import { newsRoutes } from "./news";
 import { projectsRoutes } from "./projects";

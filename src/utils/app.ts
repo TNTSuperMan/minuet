@@ -12,6 +12,8 @@ export type ElysiaApp = ReturnType<typeof createElysiaApp>;
 
 export type ElysiaContext = InferContext<ReturnType<typeof createElysiaAppWithoutDerives>>;
 
+export { ElysiaAppRoute } from "./app_route";
+
 const createElysiaAppWithoutDerives = (name: string) =>
   new Elysia()
     .use(swagger({ documentation: { info: { title: `${name} document`, version } } }))
