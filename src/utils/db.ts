@@ -2,7 +2,7 @@ import { resolve } from "path";
 
 import { Database } from "bun:sqlite";
 
-export const database = new Database(resolve(__dirname, "db.db"), {
+export const database = new Database(process.env.DB ?? resolve(__dirname, "db.db"), {
   create: true,
 });
 
