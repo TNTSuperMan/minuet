@@ -1,4 +1,5 @@
 .tsbuildinfo
 scratch-www
+dist
 # deps
 node_modules
