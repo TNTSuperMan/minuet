@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-    "format": "bun scripts/format",
-    "format:all": "prettier --write \"**/*.ts\"",
+    "format:watch": "bun scripts/format",
+    "format": "prettier --write \"**/*.ts\"",
     "lint": "eslint src/**/*.ts --fix"
   },
   "dependencies": {
