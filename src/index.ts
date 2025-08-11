@@ -1,3 +1,4 @@
+import { stdin } from "bun";
 import { AnyElysia } from "elysia";
 
 import apiApp from "./api";
@@ -8,7 +9,7 @@ import wwwApp from "./www";
 
 const listen = (app: AnyElysia, name: string, port: number) => {
   app.listen(port);
-  console.log(`${name} server is running at http://localhost:${port}`);
+  stdin.write(`${name} server is running at http://localhost:${port}\n`);
 };
 
 listen(apiApp, "API", 4519);
