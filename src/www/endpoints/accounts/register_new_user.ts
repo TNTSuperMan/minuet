@@ -1,10 +1,11 @@
-import { Elysia, t } from "elysia";
-import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
-import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
-import { database } from "../../../utils/db";
 import { password } from "bun";
-import { createExpire, key } from "../../../utils/secret";
+import { t } from "elysia";
+
+import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
+import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
 import { ElysiaApp } from "../../../utils/app";
+import { database } from "../../../utils/db";
+import { createExpire } from "../../../utils/secret";
 
 const formdataSchema = t.Object({
   username: t.String(),

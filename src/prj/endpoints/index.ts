@@ -1,9 +1,10 @@
+import { t } from "elysia";
+
 import { database } from "../../utils/db";
 import app from "../app";
 
 import "./get";
 import "./put";
-import { t } from "elysia";
 
 app.post(
   "/",
@@ -13,7 +14,7 @@ app.post(
       return "403 Forbidden";
     }
 
-    const title = "Untitled_" + Date.now();
+    const title = `Untitled_${  Date.now()}`;
 
     const { id } = database
       .query(

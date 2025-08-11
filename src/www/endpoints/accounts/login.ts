@@ -1,8 +1,9 @@
-import { login } from "../../../utils/login";
-import { ElysiaApp } from "../../../utils/app";
-import { t } from "elysia";
-import { verifyCSRF } from "../../../utils/csrf";
 import { randomUUIDv7 } from "bun";
+import { t } from "elysia";
+
+import { ElysiaApp } from "../../../utils/app";
+import { verifyCSRF } from "../../../utils/csrf";
+import { login } from "../../../utils/login";
 import { createExpire } from "../../../utils/secret";
 
 export const accountsLoginRoutes = (app: ElysiaApp) =>

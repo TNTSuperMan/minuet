@@ -1,5 +1,6 @@
-import { ElysiaApp } from "../../utils/app";
 import { t } from "elysia";
+
+import { ElysiaApp } from "../../utils/app";
 
 const responseSchema = t.Union([
   t.Object({

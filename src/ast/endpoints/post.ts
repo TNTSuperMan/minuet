@@ -1,6 +1,7 @@
-import app from "../app";
-import { database } from "../../utils/db";
 import { t } from "elysia";
+
+import { database } from "../../utils/db";
+import app from "../app";
 
 export const path_reg = /^([\da-f]{32})\.(\w+)$/;
 

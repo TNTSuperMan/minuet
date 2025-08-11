@@ -1,4 +1,5 @@
 import app from "../app";
+
 import { accountsRoutes } from "./accounts";
 import { csrfTokenRoutes } from "./csrf_token";
 import { internalAPIRoutes } from "./internalapi";
