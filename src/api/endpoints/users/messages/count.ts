@@ -5,7 +5,7 @@ import { UserMessagesRoutes } from ".";
 export const userMessagesCountRoutes = (app: UserMessagesRoutes) =>
   app.get(
     "/count",
-    ({  }) => {
+    ({}) => {
       // TODO: メッセージ機能ができたらどうにかする
       return { count: 0 };
     },

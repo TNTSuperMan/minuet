@@ -4,7 +4,6 @@ import { ElysiaApp } from "../../../../utils/app";
 import { database } from "../../../../utils/db";
 import { getProject } from "../../../../utils/project";
 
-
 export const useThumbnailPlugin = (app: ElysiaApp) =>
   app.post(
     "/thumbnail/:id/set/",

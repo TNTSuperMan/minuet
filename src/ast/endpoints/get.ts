@@ -12,9 +12,11 @@ app.get(
     const [, hash] = path_reg.exec(path)!;
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-    const assets = database
-      .prepare(`SELECT * FROM assets WHERE hash = ?`)
-      .all(hashbin) as { hash: Uint8Array, type: string, content: Uint8Array }[];
+    const assets = database.prepare(`SELECT * FROM assets WHERE hash = ?`).all(hashbin) as {
+      hash: Uint8Array;
+      type: string;
+      content: Uint8Array;
+    }[];
     if (!assets.length) throw new NotFoundError();
 
     set.headers["content-type"] = assets[0].type;

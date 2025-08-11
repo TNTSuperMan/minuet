@@ -20,7 +20,10 @@ export const newsRoutes = (app: ElysiaApp) =>
   app.get(
     "/news",
     ({ query: { limit, offset } }) =>
-      newsQuery.all(Math.min(parseInt(limit) || 0, 20), parseInt(offset) || 0) as typeof newsSchema.static,
+      newsQuery.all(
+        Math.min(parseInt(limit) || 0, 20),
+        parseInt(offset) || 0
+      ) as typeof newsSchema.static,
     {
       detail: { summary: "ニュース情報を返します" },
       query: t.Object({

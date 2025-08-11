@@ -7,9 +7,6 @@ import { createExpire } from "../../../utils/secret";
 
 import { getProjectData, projectDataSchema } from "./_util";
 
-
-
-
 export const putProjectRoutes = (app: ElysiaApp) =>
   app.put(
     "/:id",

@@ -7,7 +7,6 @@ import { getUserWithID } from "../../../utils/user";
 
 import { getProjectData, projectDataSchema } from "./_util";
 
-
 export const getProjectRoutes = (app: ElysiaApp) =>
   app.get(
     "/:id",

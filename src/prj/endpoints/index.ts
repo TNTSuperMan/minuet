@@ -14,7 +14,7 @@ app.post(
       return "403 Forbidden";
     }
 
-    const title = `Untitled_${  Date.now()}`;
+    const title = `Untitled_${Date.now()}`;
 
     const { id } = database
       .query(
