@@ -6,7 +6,6 @@ import Elysia, { InferContext } from "elysia";
 import { key } from "./secret";
 import { deriveSigninedUser } from "./user";
 
-
 const version = "0.0.0";
 
 export type ElysiaApp = ReturnType<typeof createElysiaApp>;
@@ -15,7 +14,7 @@ export type ElysiaContext = InferContext<ReturnType<typeof createElysiaAppWithou
 
 const createElysiaAppWithoutDerives = (name: string) =>
   new Elysia()
-    .use(swagger({ documentation: { info: { title: `${name  } document`, version } } }))
+    .use(swagger({ documentation: { info: { title: `${name} document`, version } } }))
     .use(jwt({ name: "jwt", secret: key, alg: "HS256" }))
     .use(
       cors({
