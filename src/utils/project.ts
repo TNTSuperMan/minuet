@@ -23,6 +23,6 @@ export interface DBProject {
 const projectQuery = database.query("SELECT * FROM projects WHERE id = ?");
 
 export const getProject = (id: number): DBProject | null => {
-  const projects = projectQuery.get(id);
-  return projects ?? (null as any);
+  const projects = projectQuery.get(id) as DBProject | void;
+  return projects ?? null;
 };

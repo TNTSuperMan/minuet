@@ -1,13 +1,16 @@
 import { resolve } from "path";
-import routes from "./scratch-www/src/routes.json" with { type: "json" };
+
 import { file } from "bun";
+
 import { ElysiaApp } from "../utils/app";
+
+import routes from "./scratch-www/src/routes.json" with { type: "json" };
 
 const fs_base = resolve(__dirname, "scratch-www", "build");
 const routesMap = routes.map(
   (e) =>
     [
-      e.name == "explore" ? /^\/explore\/(projects|studios)\/\w+\/?$/ : new RegExp(e.pattern),
+      e.name === "explore" ? /^\/explore\/(projects|studios)\/\w+\/?$/ : new RegExp(e.pattern),
       e.redirect ? e.redirect : file(resolve(fs_base, `${e.name}.html`)),
     ] as const
 );
