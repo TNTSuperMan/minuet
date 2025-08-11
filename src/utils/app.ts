@@ -12,7 +12,7 @@ export type ElysiaApp = ReturnType<typeof createElysiaApp>;
 
 export type ElysiaContext = InferContext<ReturnType<typeof createElysiaAppWithoutDerives>>;
 
-export { ElysiaAppRoute } from "./app_route";
+export type { ElysiaAppRoute } from "./app_route";
 
 const createElysiaAppWithoutDerives = (name: string) =>
   new Elysia()

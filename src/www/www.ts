@@ -2,11 +2,10 @@ import { resolve } from "path";
 
 import { file } from "bun";
 
+import routes from "../../scratch-www/src/routes.json" with { type: "json" };
 import { ElysiaApp } from "../utils/app";
 
-import routes from "./scratch-www/src/routes.json" with { type: "json" };
-
-const fs_base = resolve(__dirname, "scratch-www", "build");
+const fs_base = resolve(__dirname, "..", "..", "scratch-www", "build");
 const routesMap = routes.map(
   (e) =>
     [
