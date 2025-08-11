@@ -1,7 +1,9 @@
-import { getProject } from "../../../../utils/project";
-import { UserProjectsElysiaApp } from ".";
-import { getUser } from "../../../../utils/user";
 import { t } from "elysia";
+
+import { getProject } from "../../../../utils/project";
+import { getUser } from "../../../../utils/user";
+
+import { UserProjectsElysiaApp } from ".";
 
 export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
   app.get(

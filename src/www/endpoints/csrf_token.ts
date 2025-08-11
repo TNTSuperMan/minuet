@@ -1,7 +1,7 @@
-import app from "../app";
-import { createExpire } from "../../utils/secret";
 import { t } from "elysia";
+
 import { ElysiaApp } from "../../utils/app";
+import { createExpire } from "../../utils/secret";
 
 const csrfTokenExpire = 365 * 24 * 60 * 60;
 

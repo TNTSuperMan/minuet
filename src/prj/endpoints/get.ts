@@ -1,6 +1,7 @@
-import app from "../app";
-import { getProject } from "../../utils/project";
 import { NotFoundError, t } from "elysia";
+
+import { getProject } from "../../utils/project";
+import app from "../app";
 
 const textDecoder = new TextDecoder();
 

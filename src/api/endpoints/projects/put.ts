@@ -1,9 +1,11 @@
-import { getProject } from "../../../utils/project";
-import { database } from "../../../utils/db";
-import { getProjectData, projectDataSchema } from "./_util";
-import { ElysiaApp } from "../../../utils/app";
 import { t } from "elysia";
+
+import { ElysiaApp } from "../../../utils/app";
+import { database } from "../../../utils/db";
+import { getProject } from "../../../utils/project";
 import { createExpire } from "../../../utils/secret";
+
+import { getProjectData, projectDataSchema } from "./_util";
 
 export const putProjectRoutes = (app: ElysiaApp) =>
   app.put(

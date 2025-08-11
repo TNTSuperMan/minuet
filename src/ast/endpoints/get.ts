@@ -1,15 +1,9 @@
-import app from "../app";
-import { path_reg } from "./post";
-import { database } from "../../utils/db";
 import { NotFoundError, t } from "elysia";
 
-const assets_schema = t.Array(
-  t.Object({
-    hash: t.Uint8Array(),
-    type: t.String(),
-    content: t.Uint8Array(),
-  })
-);
+import { database } from "../../utils/db";
+import app from "../app";
+
+import { path_reg } from "./post";
 
 app.get(
   "/internalapi/asset/:path/get/",
@@ -18,9 +12,11 @@ app.get(
     const [, hash] = path_reg.exec(path)!;
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-    const assets = database
-      .prepare(`SELECT * FROM assets WHERE hash = ?`)
-      .all(hashbin) as any as typeof assets_schema.static;
+    const assets = database.prepare(`SELECT * FROM assets WHERE hash = ?`).all(hashbin) as {
+      hash: Uint8Array;
+      type: string;
+      content: Uint8Array;
+    }[];
     if (!assets.length) throw new NotFoundError();
 
     set.headers["content-type"] = assets[0].type;

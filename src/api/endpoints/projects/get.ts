@@ -1,9 +1,11 @@
 import { NotFoundError, t } from "elysia";
+
 import { ElysiaApp } from "../../../utils/app";
 import { getProject } from "../../../utils/project";
-import { getProjectData, projectDataSchema } from "./_util";
-import { getUserWithID } from "../../../utils/user";
 import { createExpire } from "../../../utils/secret";
+import { getUserWithID } from "../../../utils/user";
+
+import { getProjectData, projectDataSchema } from "./_util";
 
 export const getProjectRoutes = (app: ElysiaApp) =>
   app.get(

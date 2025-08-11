@@ -1,7 +1,6 @@
-import { password, randomUUIDv7 } from "bun";
-import { createExpire } from "./secret";
+import { password } from "bun";
+
 import { DBUser, getUser } from "./user";
-import { ElysiaContext } from "./app";
 
 export const login = async (
   name: string,

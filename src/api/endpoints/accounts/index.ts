@@ -1,5 +1,5 @@
 import { ElysiaApp } from "../../../utils/app";
-import app from "../../app";
+
 import { checkPasswordRoutes } from "./checkpassword";
 import { checkUsernameRoutes } from "./checkusername";
 

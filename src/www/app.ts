@@ -1,9 +1,10 @@
-import { WWWPageRoutes } from "./www";
 import { createElysiaApp } from "../utils/app";
+
+import { WWWPageRoutes } from "./www";
 
 const app = createElysiaApp("WWW")
   .use(WWWPageRoutes)
-  .onError(async ({ code, set, error, route, redirect }) => {
+  .onError(async ({ code, set, error }) => {
     switch (code) {
       case "NOT_FOUND":
         return '404<br><a href="/">ホーム</a>';

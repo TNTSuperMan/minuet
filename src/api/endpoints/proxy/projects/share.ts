@@ -1,8 +1,9 @@
 import { t } from "elysia";
-import { getProject } from "../../../../utils/project";
-import { database } from "../../../../utils/db";
+
 import { ElysiaApp } from "../../../../utils/app";
 import { verifyCSRF } from "../../../../utils/csrf";
+import { database } from "../../../../utils/db";
+import { getProject } from "../../../../utils/project";
 
 export const proxyShareProjectRoutes = (app: ElysiaApp) =>
   app.use(verifyCSRF()).put(

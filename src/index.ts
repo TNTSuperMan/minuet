@@ -1,13 +1,15 @@
-import Elysia from "elysia";
+import { stdin } from "bun";
+import { AnyElysia } from "elysia";
+
 import apiApp from "./api";
-import wwwApp from "./www";
+import astApp from "./ast";
 import prjApp from "./prj";
 import resApp from "./res";
-import astApp from "./ast";
+import wwwApp from "./www";
 
-const listen = (app: Elysia<any, any>, name: string, port: number) => {
+const listen = (app: AnyElysia, name: string, port: number) => {
   app.listen(port);
-  console.log(`${name} server is running at http://localhost:${port}`);
+  stdin.write(`${name} server is running at http://localhost:${port}\n`);
 };
 
 listen(apiApp, "API", 4519);

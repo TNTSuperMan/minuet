@@ -1,6 +1,7 @@
 import { t } from "elysia";
-import { DBUser, getImages, imagesSchema } from "../../../utils/user";
+
 import { DBProject } from "../../../utils/project";
+import { DBUser, getImages, imagesSchema } from "../../../utils/user";
 
 export const projectDataSchema = t.Object({
   author: t.Object({
@@ -88,9 +89,9 @@ export const getProjectData = (
     "282x218": "https://example.com/comming_soon",
   },
   instructions: proj.instructions,
-  is_published: proj.public != 0,
+  is_published: proj.public !== 0,
   project_token: token,
-  public: proj.public != 0,
+  public: proj.public !== 0,
   remix: {
     parent: proj.parent,
     root: proj.parent, // TODO: ここを修正して

@@ -1,4 +1,5 @@
 import { ElysiaApp } from "../../../../utils/app";
+
 import { useThumbnailPlugin } from "./thumbnail";
 
 export const useProjectPlugin = (app: ElysiaApp) =>

@@ -1,8 +1,9 @@
-import app from "../app";
-import sharp from "sharp";
 import { file } from "bun";
-import { getUserWithID } from "../../utils/user";
 import { NotFoundError, t } from "elysia";
+import sharp from "sharp";
+
+import { getUserWithID } from "../../utils/user";
+import app from "../app";
 
 const sample_icon = await file("./src/utils/sample.png").bytes();
 

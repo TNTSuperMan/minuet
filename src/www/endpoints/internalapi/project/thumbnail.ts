@@ -1,7 +1,8 @@
-import { getProject } from "../../../../utils/project";
-import { database } from "../../../../utils/db";
-import { ElysiaApp } from "../../../../utils/app";
 import { t } from "elysia";
+
+import { ElysiaApp } from "../../../../utils/app";
+import { database } from "../../../../utils/db";
+import { getProject } from "../../../../utils/project";
 
 export const useThumbnailPlugin = (app: ElysiaApp) =>
   app.post(

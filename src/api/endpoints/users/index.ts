@@ -1,6 +1,8 @@
+import { NotFoundError, t } from "elysia";
+
 import { ElysiaApp, ElysiaAppRoute } from "../../../utils/app";
 import { getImages, getUser, userSchema } from "../../../utils/user";
-import { NotFoundError, t } from "elysia";
+
 import { userMessagesRoutes } from "./messages";
 import { userProjectsRoutes } from "./projects";
 
@@ -20,7 +22,7 @@ export const userRoutes = (app: ElysiaApp) =>
             return {
               id: user.id,
               username: user.name,
-              scratchteam: user.scratchteam != 0,
+              scratchteam: user.scratchteam !== 0,
               history: {
                 joined: new Date(user.joined).toISOString(),
               },

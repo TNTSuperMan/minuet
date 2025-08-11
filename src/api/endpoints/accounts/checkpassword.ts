@@ -1,4 +1,5 @@
 import { t } from "elysia";
+
 import { ElysiaApp } from "../../../utils/app";
 
 export const isValidPassword = (password: string) =>

@@ -1,4 +1,5 @@
 import { ElysiaApp } from "../../../utils/app";
+
 import { proxyFeaturedRoutes } from "./featured";
 import { proxyProjectsRoutes } from "./projects";
 
