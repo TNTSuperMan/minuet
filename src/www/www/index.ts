@@ -1,6 +1,6 @@
 import { NotFoundError } from "elysia";
 
-import routes from "../../../scratch-www/src/routes.json" with { type: "json" };
+import routes from "../../../minuet-www/src/routes.json" with { type: "json" };
 import { ElysiaApp } from "../../utils/app";
 
 const { default: files } = await (process.env.NODE_ENV === "production"
