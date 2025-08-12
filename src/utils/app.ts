@@ -16,7 +16,11 @@ export type { ElysiaAppRoute } from "./app_route";
 
 const createElysiaAppWithoutDerives = (name: string) =>
   new Elysia()
-    .use(swagger({ documentation: { info: { title: `${name} document`, version } } }))
+    .use(
+      process.env.NODE_ENV === "production"
+        ? new Elysia()
+        : swagger({ documentation: { info: { title: `${name} document`, version } } })
+    )
     .use(jwt({ name: "jwt", secret: key, alg: "HS256" }))
     .use(
       cors({
