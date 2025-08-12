@@ -13,7 +13,7 @@ export default new Proxy<{
   {},
   {
     async get(_, p: string) {
-      const path = resolve("scratch-www", "build", p);
+      const path = resolve("minuet-www", "build", p);
       if (p in cache) return cache[p] ?? undefined;
       const f = file(path);
       if (await f.exists()) {
@@ -24,7 +24,7 @@ export default new Proxy<{
       }
     },
     has(_, p: string) {
-      const path = resolve("scratch-www", "build", p);
+      const path = resolve("minuet-www", "build", p);
       return (p in cache && cache[p] !== null) || (existsSync(path) && statSync(path).isFile());
     },
   }
