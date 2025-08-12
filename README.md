@@ -3,12 +3,9 @@
 > 
 > "Scratch"はMIT MediaLabの商標であり、このリポジトリはそれに関する権利を主張しません。  
 > Scratch" is a trademark of MIT MediaLab and this repository claims no rights thereto.
-> 
-> そのため、このプログラムの使用は教育・研究・個人利用に留めてください。  
-> Therefore, this program should be used only for educational, research, and personal use.
 
-# replicat
-Scratchのウェブサイトを~~Hono~~Elysiaで模倣しています。  
+# minuet
+Scratchを基に、プログラミングコミュニティーのプログラムを作ってます。
 多分オフラインでも動きます。
 
 ## 環境
@@ -30,5 +27,5 @@ $ bun dev
 APIサーバーは[http://localhost:4519](http://localhost:4519)、  
 Webサーバーは[http://localhost:4517](http://localhost:4517)、  
 プロジェクトサーバーは[http://localhost:4513](http://localhost:4513)、  
-リソースサーバーは[http://localhost:4514](http://localhost:4514)、
+リソースサーバーは[http://localhost:4514](http://localhost:4514)、  
 アセットサーバーは[http://localhost:4518](http://localhost:4518)で動きます。
