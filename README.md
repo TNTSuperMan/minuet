@@ -1,8 +1,9 @@
 > [!WARNING]
 > **これは非公式です。**　**THIS IS UNOFFICIAL**
 > 
-> "Scratch"はMIT MediaLabの商標であり、このリポジトリはそれに関する権利を主張しません。  
-> Scratch" is a trademark of MIT MediaLab and this repository claims no rights thereto.
+> "Scratch"はMIT MediaLabの商標であり、このリポジトリはそれに関する権利を主張しません。
+>
+> 現在、このプロジェクトでは商標の削除に取り組んでいますが、 まだScratchの商標が一部含まれているため、再配布等は控えてください。
 
 # minuet
 Scratchを基に、プログラミングコミュニティーのプログラムを作ってます。
