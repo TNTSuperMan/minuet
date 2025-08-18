@@ -21,24 +21,24 @@ export const newsRoutes = (app: ElysiaApp) =>
     "/news",
     ({ query: { limit, offset } }) =>
       newsQuery.all(
-        Math.min(parseInt(limit) || 0, 20),
-        parseInt(offset) || 0
+        Math.min(parseInt(limit??"") || 20, 20),
+        parseInt(offset??"") || 0
       ) as typeof newsSchema.static,
     {
       detail: { summary: "ニュース情報を返します" },
       query: t.Object({
-        limit: t.String({
+        limit: t.Optional(t.String({
           format: "regex",
           pattern: "^\\d+$",
           description: "表示数の最大(最大・デフォルト20)",
           examples: [20, 3],
-        }),
-        offset: t.String({
+        })),
+        offset: t.Optional(t.String({
           format: "regex",
           pattern: "^\\d+$",
           description: "表示のオフセット",
           examples: [0, 3],
-        }),
+        })),
       }),
       response: newsSchema,
     }
