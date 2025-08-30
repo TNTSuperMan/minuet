@@ -15,7 +15,7 @@
     "sharp": "^0.34.2"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.2.21",
     "@types/node": "^22.15.29",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",

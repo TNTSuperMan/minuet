@@ -1,7 +1,7 @@
 import { t } from "elysia";
 
 import { ElysiaContext } from "./app";
-import { database } from "./db";
+import { sql } from "./db";
 
 export const imagesSchema = t.Object(
   {
@@ -54,18 +54,14 @@ export const userSchema = t.Object({
   }),
 });
 
-const userQuery = database.query("SELECT * FROM users WHERE name = ?");
-
-export const getUser = (name: string): DBUser | null => {
-  const user = userQuery.get(name) as DBUser | void;
-  return user ?? null;
+export const getUser = async (name: string): Promise<DBUser | null> => {
+  const user = await sql`SELECT * FROM users WHERE name = ${name}` as [DBUser] | [];
+  return user[0] ?? null;
 };
 
-const userIDQuery = database.query("SELECT * FROM users WHERE id = ?");
-
-export const getUserWithID = (id: number): DBUser | null => {
-  const user = userIDQuery.get(id) as DBUser | void;
-  return user ?? null;
+export const getUserWithID = async (id: number): Promise<DBUser | null> => {
+  const user = await sql`SELECT * FROM users WHERE id = ${id}` as [DBUser] | [];
+  return user[0] ?? null;
 };
 
 export const deriveSigninedUser = async ({
@@ -83,5 +79,5 @@ export const deriveSigninedUser = async ({
 
   if (typeof payload.aud !== "string") return {};
 
-  return { user: getUser(payload.aud) };
+  return { user: await getUser(payload.aud) };
 };

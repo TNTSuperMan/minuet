@@ -1,18 +1,18 @@
 import { NotFoundError, t } from "elysia";
 
-import { database } from "../../utils/db";
+import { sql } from "../../utils/db";
 import app from "../app";
 
 import { path_reg } from "./post";
 
 app.get(
   "/internalapi/asset/:path/get/",
-  ({ params, set }) => {
+  async ({ params, set }) => {
     const { path } = params;
     const [, hash] = path_reg.exec(path)!;
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-    const assets = database.prepare(`SELECT * FROM assets WHERE hash = ?`).all(hashbin) as {
+    const assets = await sql`SELECT * FROM assets WHERE hash = ${hashbin}` as {
       hash: Uint8Array;
       type: string;
       content: Uint8Array;

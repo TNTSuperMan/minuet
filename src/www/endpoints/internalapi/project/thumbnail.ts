@@ -1,14 +1,14 @@
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../../utils/app";
-import { database } from "../../../../utils/db";
+import { sql } from "../../../../utils/db";
 import { getProject } from "../../../../utils/project";
 
 export const useThumbnailPlugin = (app: ElysiaApp) =>
   app.post(
     "/thumbnail/:id/set/",
     async ({ params: { id }, body, user, set }) => {
-      const proj = getProject(parseInt(id));
+      const proj = await getProject(parseInt(id));
 
       if (!proj || !user || proj.author !== user.id) {
         set.status = 403;
@@ -17,7 +17,7 @@ export const useThumbnailPlugin = (app: ElysiaApp) =>
 
       const body_bytes = await body.bytes();
 
-      database.query("UPDATE projects SET thumbnail = ? WHERE id = ?").get(body_bytes, proj.id);
+      await sql`UPDATE projects SET thumbnail = ${body_bytes} WHERE id = ${proj.id}`;
 
       return {
         status: "success",

@@ -1,18 +1,18 @@
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../utils/app";
-import { database } from "../../../utils/db";
+import { sql } from "../../../utils/db";
 
 const username_regex = /^[\da-zA-Z-_]{3,20}$/;
 const bad_regex = /(google|ggr|goog|gtm|youtube|gemini)/;
 
-export const validateUsername = (
+export const validateUsername = async (
   username: string
-): "invalid username" | "bad username" | "username exists" | "valid username" => {
+): Promise<"invalid username" | "bad username" | "username exists" | "valid username"> => {
   const lowername = username.toLowerCase();
   if (!username_regex.test(lowername)) return "invalid username";
   else if (bad_regex.test(lowername)) return "bad username";
-  else if (database.query(`SELECT * FROM users WHERE name = ?`).all(username).length)
+  else if ((await sql`SELECT * FROM users WHERE name = ${username}`).length)
     return "username exists";
   else return "valid username";
 };
@@ -20,7 +20,7 @@ export const validateUsername = (
 export const checkUsernameRoutes = (app: ElysiaApp) =>
   app.get(
     "/checkusername/:username/",
-    ({ params: { username } }) => ({ username, msg: validateUsername(username) }),
+    async ({ params: { username } }) => ({ username, msg: await validateUsername(username) }),
     {
       detail: { summary: "新規ユーザー名として有効かどうかを返します" },
       params: t.Object({

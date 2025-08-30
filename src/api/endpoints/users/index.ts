@@ -15,8 +15,8 @@ export const userRoutes = (app: ElysiaApp) =>
       .use(userProjectsRoutes)
       .get(
         "/",
-        ({ params: { usr } }) => {
-          const user = getUser(usr);
+        async ({ params: { usr } }) => {
+          const user = await getUser(usr);
           if (!user) throw new NotFoundError();
           else
             return {

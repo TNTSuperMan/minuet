@@ -8,11 +8,11 @@ import { UserProjectsElysiaApp } from ".";
 export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
   app.get(
     "/visivility",
-    ({ user, params: { usr, id } }) => {
-      const param_user = getUser(usr);
+    async ({ user, params: { usr, id } }) => {
+      const param_user = await getUser(usr);
       if (!param_user) return new Response(null, { status: 403 });
 
-      const proj = getProject(parseInt(id));
+      const proj = await getProject(parseInt(id));
       if (!proj) return new Response(null, { status: 403 });
 
       if (param_user.id !== proj.author) return new Response(null, { status: 403 });
@@ -43,15 +43,18 @@ export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
           examples: ["119019019", "1"],
         }),
       }),
-      response: t.Object({
-        censored: t.Boolean({ description: "検閲されているか" }),
-        censoredByAdmin: t.Boolean({ description: "管理者による検閲か" }),
-        censoredByCommunity: t.Boolean({ description: "大量報告による検閲か" }),
-        creatorId: t.Number({ description: "プロジェクト作成者" }),
-        deleted: t.Boolean({ description: "削除されたか" }),
-        messages: t.Optional(t.String({ description: "検閲メッセージ" })),
-        projectId: t.Number({ description: "対象のプロジェクトID" }),
-        reshareable: t.Boolean({ description: "再共有が可能か" }),
-      }),
+      response: {
+        200: t.Object({
+          censored: t.Boolean({ description: "検閲されているか" }),
+          censoredByAdmin: t.Boolean({ description: "管理者による検閲か" }),
+          censoredByCommunity: t.Boolean({ description: "大量報告による検閲か" }),
+          creatorId: t.Number({ description: "プロジェクト作成者" }),
+          deleted: t.Boolean({ description: "削除されたか" }),
+          messages: t.Optional(t.String({ description: "検閲メッセージ" })),
+          projectId: t.Number({ description: "対象のプロジェクトID" }),
+          reshareable: t.Boolean({ description: "再共有が可能か" }),
+        }),
+        403: t.Null()
+      },
     }
   );
