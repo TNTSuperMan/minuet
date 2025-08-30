@@ -16,9 +16,9 @@ app.post(
 
     const title = `Untitled_${Date.now()}`;
 
-    const { id } = await sql`INSERT INTO projects (
+    const { id } = (await sql`INSERT INTO projects (
       author, created, modified, title, description, instructions, comments_allowed, public, json
-    ) VALUES (${user.id},${Date.now()},${Date.now()},${title},${""},${""},${1},${0},${await body.text()}) RETURNING id` as {
+    ) VALUES (${user.id},${Date.now()},${Date.now()},${title},${""},${""},${1},${0},${await body.text()}) RETURNING id`) as {
       id: number;
     };
 

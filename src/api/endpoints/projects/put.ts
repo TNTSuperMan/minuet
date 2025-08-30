@@ -17,15 +17,9 @@ export const putProjectRoutes = (app: ElysiaApp) =>
         return "403 Forbidden";
       }
 
-      await sql`UPDATE projects SET title = ${
-        body.title ?? proj.title
-      }, description = ${
+      await sql`UPDATE projects SET title = ${body.title ?? proj.title}, description = ${
         body.description ?? proj.description
-      }, instructions = ${
-        body.instructions ?? proj.instructions
-      } WHERE id = ${
-       proj.id
-      }`;
+      }, instructions = ${body.instructions ?? proj.instructions} WHERE id = ${proj.id}`;
 
       return await getProjectData(
         proj,

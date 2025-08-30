@@ -32,9 +32,11 @@ export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
         return [{ msg: "invalid password" }];
       }
 
-      const dbRes = await sql`INSERT INTO users (
+      const dbRes = (await sql`INSERT INTO users (
         name, birth_month, birth_year, scratchteam, email, password, gender, joined, status, bio, country
-      ) VALUES (${body.username},${parseInt(body.birth_month)},${parseInt(body.birth_year)},${0},${body.email},${await password.hash(body.password)},${body.gender},${Date.now()},${""},${""},${body.country}) RETURNING id` as { id: number };
+      ) VALUES (${body.username},${parseInt(body.birth_month)},${parseInt(body.birth_year)},${0},${body.email},${await password.hash(body.password)},${body.gender},${Date.now()},${""},${""},${body.country}) RETURNING id`) as {
+        id: number;
+      };
 
       return [
         {

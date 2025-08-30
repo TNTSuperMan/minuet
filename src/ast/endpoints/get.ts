@@ -12,7 +12,7 @@ app.get(
     const [, hash] = path_reg.exec(path)!;
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-    const assets = await sql`SELECT * FROM assets WHERE hash = ${hashbin}` as {
+    const assets = (await sql`SELECT * FROM assets WHERE hash = ${hashbin}`) as {
       hash: Uint8Array;
       type: string;
       content: Uint8Array;

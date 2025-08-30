@@ -18,26 +18,29 @@ export const newsRoutes = (app: ElysiaApp) =>
   app.get(
     "/news",
     async ({ query: { limit, offset } }) =>
-      (await sql`SELECT * FROM news LIMIT ${
-        Math.min(parseInt(limit??"") || 20, 20)
-      } OFFSET ${
-       parseInt(offset??"") || 0}
+      (await sql`SELECT * FROM news LIMIT ${Math.min(parseInt(limit ?? "") || 20, 20)} OFFSET ${
+        parseInt(offset ?? "") || 0
+      }
       `) as typeof newsSchema.static,
     {
       detail: { summary: "ニュース情報を返します" },
       query: t.Object({
-        limit: t.Optional(t.String({
-          format: "regex",
-          pattern: "^\\d+$",
-          description: "表示数の最大(最大・デフォルト20)",
-          examples: [20, 3],
-        })),
-        offset: t.Optional(t.String({
-          format: "regex",
-          pattern: "^\\d+$",
-          description: "表示のオフセット",
-          examples: [0, 3],
-        })),
+        limit: t.Optional(
+          t.String({
+            format: "regex",
+            pattern: "^\\d+$",
+            description: "表示数の最大(最大・デフォルト20)",
+            examples: [20, 3],
+          })
+        ),
+        offset: t.Optional(
+          t.String({
+            format: "regex",
+            pattern: "^\\d+$",
+            description: "表示のオフセット",
+            examples: [0, 3],
+          })
+        ),
       }),
       response: newsSchema,
     }

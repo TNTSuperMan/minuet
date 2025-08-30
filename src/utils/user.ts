@@ -55,12 +55,12 @@ export const userSchema = t.Object({
 });
 
 export const getUser = async (name: string): Promise<DBUser | null> => {
-  const user = await sql`SELECT * FROM users WHERE name = ${name}` as [DBUser] | [];
+  const user = (await sql`SELECT * FROM users WHERE name = ${name}`) as [DBUser] | [];
   return user[0] ?? null;
 };
 
 export const getUserWithID = async (id: number): Promise<DBUser | null> => {
-  const user = await sql`SELECT * FROM users WHERE id = ${id}` as [DBUser] | [];
+  const user = (await sql`SELECT * FROM users WHERE id = ${id}`) as [DBUser] | [];
   return user[0] ?? null;
 };
 

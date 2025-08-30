@@ -54,7 +54,7 @@ export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
           projectId: t.Number({ description: "対象のプロジェクトID" }),
           reshareable: t.Boolean({ description: "再共有が可能か" }),
         }),
-        403: t.Null()
+        403: t.Null(),
       },
     }
   );
