@@ -4,7 +4,7 @@ import { t } from "elysia";
 import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
 import { ElysiaApp } from "../../../utils/app";
-import { database } from "../../../utils/db";
+import { sql } from "../../../utils/db";
 import { createExpire } from "../../../utils/secret";
 
 const formdataSchema = t.Object({
@@ -22,7 +22,7 @@ export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
   app.post(
     "/accounts/register_new_user/",
     async ({ jwt, body, set }) => {
-      const usr_validate_res = validateUsername(body.username);
+      const usr_validate_res = await validateUsername(body.username);
       if (usr_validate_res !== "valid username") {
         set.status = 400;
         return [{ msg: "invalid username" }];
@@ -32,25 +32,11 @@ export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
         return [{ msg: "invalid password" }];
       }
 
-      const dbRes = database
-        .query(
-          `INSERT INTO users (
-    name, birth_month, birth_year, scratchteam, email, password, gender, joined, status, bio, country
-  ) VALUES (?,?,?,?,?,?,?,?,?,?,?) RETURNING id`
-        )
-        .get(
-          body.username,
-          parseInt(body.birth_month),
-          parseInt(body.birth_year),
-          0,
-          body.email,
-          await password.hash(body.password),
-          body.gender,
-          Date.now(),
-          "",
-          "",
-          body.country
-        ) as { id: number };
+      const dbRes = (await sql`INSERT INTO users (
+        name, birth_month, birth_year, scratchteam, email, password, gender, joined, status, bio, country
+      ) VALUES (${body.username},${parseInt(body.birth_month)},${parseInt(body.birth_year)},${0},${body.email},${await password.hash(body.password)},${body.gender},${Date.now()},${""},${""},${body.country}) RETURNING id`) as {
+        id: number;
+      };
 
       return [
         {

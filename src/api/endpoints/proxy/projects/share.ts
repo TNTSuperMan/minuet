@@ -2,21 +2,21 @@ import { t } from "elysia";
 
 import { ElysiaApp } from "../../../../utils/app";
 import { verifyCSRF } from "../../../../utils/csrf";
-import { database } from "../../../../utils/db";
+import { sql } from "../../../../utils/db";
 import { getProject } from "../../../../utils/project";
 
 export const proxyShareProjectRoutes = (app: ElysiaApp) =>
   app.use(verifyCSRF()).put(
     "/proxy/projects/:id/share",
     async ({ params: { id }, user, set }) => {
-      const proj = getProject(parseInt(id));
+      const proj = await getProject(parseInt(id));
 
       if (!proj || !user || proj.author !== user.id) {
         set.status = 403;
         return "403 Forbidden";
       }
 
-      database.query("UPDATE projects SET public = 1 WHERE id = ?").get(proj.id);
+      await sql`"UPDATE projects SET public = 1 WHERE id = ${proj.id}`;
 
       return { is_published: "true" as const };
     },

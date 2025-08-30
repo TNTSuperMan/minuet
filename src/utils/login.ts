@@ -17,7 +17,7 @@ export const login = async (
       info: DBUser;
     }
 > => {
-  const user = getUser(name);
+  const user = await getUser(name);
   if (!user) return { type: "notFound" };
   if (!(await password.verify(pass, user.password))) return { type: "invalidPass" };
 

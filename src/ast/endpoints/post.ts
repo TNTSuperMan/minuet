@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-import { database } from "../../utils/db";
+import { sql } from "../../utils/db";
 import app from "../app";
 
 export const path_reg = /^([\da-f]{32})\.(\w+)$/;
@@ -32,9 +32,7 @@ app.post(
 
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
 
-    database
-      .query(`INSERT OR IGNORE INTO assets (hash, type, content) VALUES (?, ?, ?)`)
-      .get(hashbin, mime, await body.bytes());
+    await sql`INSERT OR IGNORE INTO assets (hash, type, content) VALUES (${hashbin},${mime}, ${await body.bytes()})`;
 
     return {
       "content-name": `${hash}.${ext}`,

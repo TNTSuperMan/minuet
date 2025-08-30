@@ -1,13 +1,13 @@
 import { t } from "elysia";
 
-import { database } from "../../utils/db";
+import { sql } from "../../utils/db";
 import { getProject } from "../../utils/project";
 import app from "../app";
 
 app.put(
   "/:id",
   async ({ user, body, set, params: { id } }) => {
-    const proj = getProject(parseInt(id));
+    const proj = await getProject(parseInt(id));
 
     if (!proj || !user || proj.author !== user.id) {
       set.status = 403;
@@ -16,9 +16,7 @@ app.put(
 
     const body_json = await body.json();
 
-    database
-      .query("UPDATE projects SET json = ?, modified = ? WHERE id = ?")
-      .get(JSON.stringify(body_json), Date.now(), parseInt(id));
+    await sql`UPDATE projects SET json = ${JSON.stringify(body_json)}, modified = ${Date.now()} WHERE id = ${parseInt(id)}`;
 
     return {
       status: "ok",

@@ -1,21 +1,17 @@
-import { resolve } from "path";
+import { SQL } from "bun";
 
-import { Database } from "bun:sqlite";
+export const sql = new SQL(process.env.DB ?? `sqlite://${import.meta.dir}/db.db`);
 
-export const database = new Database(process.env.DB ?? resolve(__dirname, "db.db"), {
-  create: true,
-});
-
-database.exec(`CREATE TABLE IF NOT EXISTS news (
+sql`CREATE TABLE IF NOT EXISTS news (
   id INTEGER PRIMARY KEY,
   stamp    TEXT NOT NULL,
   headline TEXT NOT NULL,
   url      TEXT NOT NULL,
   image    TEXT NOT NULL,
   copy     TEXT NOT NULL
-)`);
+)`;
 
-database.exec(`CREATE TABLE IF NOT EXISTS users (
+sql`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE COLLATE NOCASE NOT NULL,
   birth_month INTEGER NOT NULL,
@@ -29,9 +25,9 @@ database.exec(`CREATE TABLE IF NOT EXISTS users (
   bio      TEXT NOT NULL,
   country  TEXT NOT NULL,
   icon     BLOB
-)`);
+)`;
 
-database.exec(`CREATE TABLE IF NOT EXISTS projects (
+sql`CREATE TABLE IF NOT EXISTS projects (
   id INTEGER PRIMARY KEY,
   author INTEGER NOT NULL,
 
@@ -49,10 +45,10 @@ database.exec(`CREATE TABLE IF NOT EXISTS projects (
   parent INTEGER,
 
   json TEXT NOT NULL
-)`);
+)`;
 
-database.exec(`CREATE TABLE IF NOT EXISTS assets (
+sql`CREATE TABLE IF NOT EXISTS assets (
   hash BLOB PRIMARY KEY,
   type TEXT NOT NULL,
   content BLOB NOT NULL
-)`);
+)`;

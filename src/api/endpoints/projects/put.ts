@@ -1,7 +1,7 @@
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../utils/app";
-import { database } from "../../../utils/db";
+import { sql } from "../../../utils/db";
 import { getProject } from "../../../utils/project";
 import { createExpire } from "../../../utils/secret";
 
@@ -11,20 +11,15 @@ export const putProjectRoutes = (app: ElysiaApp) =>
   app.put(
     "/:id",
     async ({ user, set, body, params: { id }, jwt }) => {
-      const proj = getProject(parseInt(id));
+      const proj = await getProject(parseInt(id));
       if (!proj || !user || proj.author !== user.id) {
         set.status = 403;
         return "403 Forbidden";
       }
 
-      database
-        .query("UPDATE projects SET title = ?, description = ?, instructions = ? WHERE id = ?")
-        .get(
-          body.title ?? proj.title,
-          body.description ?? proj.description,
-          body.instructions ?? proj.instructions,
-          proj.id
-        );
+      await sql`UPDATE projects SET title = ${body.title ?? proj.title}, description = ${
+        body.description ?? proj.description
+      }, instructions = ${body.instructions ?? proj.instructions} WHERE id = ${proj.id}`;
 
       return await getProjectData(
         proj,

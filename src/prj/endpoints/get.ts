@@ -20,7 +20,7 @@ app.get(
     )
       throw new NotFoundError();
 
-    const proj = getProject(id_num);
+    const proj = await getProject(id_num);
     if (!proj) throw new NotFoundError();
 
     return JSON.parse(typeof proj.json === "string" ? proj.json : textDecoder.decode(proj.json));

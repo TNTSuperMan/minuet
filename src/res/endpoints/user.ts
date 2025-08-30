@@ -12,7 +12,7 @@ app.get(
   async ({ params, set }) => {
     const { id, width } = params;
 
-    const user = getUserWithID(parseInt(id));
+    const user = await getUserWithID(parseInt(id));
     if (!user) throw new NotFoundError();
 
     set.headers["content-type"] = "image/png";

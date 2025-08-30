@@ -1,9 +1,7 @@
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../utils/app";
-import { database } from "../../utils/db";
-
-const newsQuery = database.query("SELECT * FROM news LIMIT ? OFFSET ?");
+import { sql } from "../../utils/db";
 
 const newsSchema = t.Array(
   t.Object({
@@ -19,26 +17,30 @@ const newsSchema = t.Array(
 export const newsRoutes = (app: ElysiaApp) =>
   app.get(
     "/news",
-    ({ query: { limit, offset } }) =>
-      newsQuery.all(
-        Math.min(parseInt(limit??"") || 20, 20),
-        parseInt(offset??"") || 0
-      ) as typeof newsSchema.static,
+    async ({ query: { limit, offset } }) =>
+      (await sql`SELECT * FROM news LIMIT ${Math.min(parseInt(limit ?? "") || 20, 20)} OFFSET ${
+        parseInt(offset ?? "") || 0
+      }
+      `) as typeof newsSchema.static,
     {
       detail: { summary: "ニュース情報を返します" },
       query: t.Object({
-        limit: t.Optional(t.String({
-          format: "regex",
-          pattern: "^\\d+$",
-          description: "表示数の最大(最大・デフォルト20)",
-          examples: [20, 3],
-        })),
-        offset: t.Optional(t.String({
-          format: "regex",
-          pattern: "^\\d+$",
-          description: "表示のオフセット",
-          examples: [0, 3],
-        })),
+        limit: t.Optional(
+          t.String({
+            format: "regex",
+            pattern: "^\\d+$",
+            description: "表示数の最大(最大・デフォルト20)",
+            examples: [20, 3],
+          })
+        ),
+        offset: t.Optional(
+          t.String({
+            format: "regex",
+            pattern: "^\\d+$",
+            description: "表示のオフセット",
+            examples: [0, 3],
+          })
+        ),
       }),
       response: newsSchema,
     }

@@ -1,4 +1,4 @@
-import { database } from "./db";
+import { sql } from "./db";
 
 export interface DBProject {
   id: number;
@@ -20,9 +20,7 @@ export interface DBProject {
   json: string;
 }
 
-const projectQuery = database.query("SELECT * FROM projects WHERE id = ?");
-
-export const getProject = (id: number): DBProject | null => {
-  const projects = projectQuery.get(id) as DBProject | void;
-  return projects ?? null;
+export const getProject = async (id: number): Promise<DBProject | null> => {
+  const projects = await sql`SELECT * FROM projects WHERE id = ${id}` as [DBProject] | [];
+  return projects[0] ?? null;
 };
