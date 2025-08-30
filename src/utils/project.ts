@@ -21,6 +21,6 @@ export interface DBProject {
 }
 
 export const getProject = async (id: number): Promise<DBProject | null> => {
-  const projects = (await sql`SELECT * FROM projects WHERE id = ${id}`) as [DBProject] | [];
+  const projects = await sql`SELECT * FROM projects WHERE id = ${id}` as [DBProject] | [];
   return projects[0] ?? null;
 };
