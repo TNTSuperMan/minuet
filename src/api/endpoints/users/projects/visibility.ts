@@ -8,18 +8,33 @@ import { UserProjectsElysiaApp } from ".";
 export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
   app.get(
     "/visivility",
-    async ({ user, params: { usr, id } }) => {
+    async ({ user, params: { usr, id }, set }) => {
       const param_user = await getUser(usr);
-      if (!param_user) return new Response(null, { status: 403 });
+      if (!param_user) {
+        set.status = 403;
+        return "";
+      }
 
       const proj = await getProject(parseInt(id));
-      if (!proj) return new Response(null, { status: 403 });
+      if (!proj) {
+        set.status = 403;
+        return "";
+      }
 
-      if (param_user.id !== proj.author) return new Response(null, { status: 403 });
+      if (param_user.id !== proj.author) {
+        set.status = 403;
+        return "";
+      }
 
-      if (!user) return new Response(null, { status: 403 });
+      if (!user) {
+        set.status = 403;
+        return "";
+      }
 
-      if (user.id !== param_user.id) return new Response(null, { status: 403 });
+      if (user.id !== param_user.id) {
+        set.status = 403;
+        return "";
+      }
 
       // TODO: 報告機能が出来たら進める
       return {
@@ -54,7 +69,7 @@ export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
           projectId: t.Number({ description: "対象のプロジェクトID" }),
           reshareable: t.Boolean({ description: "再共有が可能か" }),
         }),
-        403: t.Null(),
+        403: t.Literal(""),
       },
     }
   );
