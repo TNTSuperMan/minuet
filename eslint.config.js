@@ -6,7 +6,7 @@ import importPlugin from "eslint-plugin-import";
 export default [
   {
     files: ["src/**/*.ts"],
-    ignores: ["node_modules", "scratch-www"],
+    ignores: ["node_modules", "minuet-www"],
     languageOptions: {
       parser: tsParser,
     },
