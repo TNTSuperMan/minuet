@@ -2,5 +2,6 @@
 minuet-www
 dist
 .env
+db.db
 # deps
 node_modules

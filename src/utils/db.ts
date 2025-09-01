@@ -1,6 +1,6 @@
 import { SQL } from "bun";
 
-export const sql = new SQL(process.env.DB ?? `sqlite://${import.meta.dir}/db.db`);
+export const sql = new SQL(process.env.DB ?? `sqlite://./db.db`);
 
 sql`CREATE TABLE IF NOT EXISTS news (
   id INTEGER PRIMARY KEY,

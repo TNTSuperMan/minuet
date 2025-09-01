@@ -16,6 +16,18 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 |フレームワーク|Elysia|
 |データベース|SQLite|
 
+## 環境変数
+.envなりコマンドラインなりで環境変数いじってね
+|名前|初期値|説明|
+|-|-|-|
+|API_PORT|4519|APIサーバーのポート番号|
+|WWW_PORT|4517|WWWサーバーのポート番号|
+|PRJ_PORT|4513|プロジェクトサーバーのポート番号|
+|RES_PORT|4514|リソースサーバーのポート番号|
+|AST_PORT|4518|アセットサーバーのポート番号|
+|ORIGINS||CORSのオリジン(カンマ区切り)|
+|DB|sqlite://./db.db|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
+
 ## 導入
 - ないのであれば[bun](https://bun.sh/)をインストール
 - ここで`bun i`
@@ -25,8 +37,3 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 ```sh
 $ bun dev
 ```
-APIサーバーは[http://localhost:4519](http://localhost:4519)、  
-Webサーバーは[http://localhost:4517](http://localhost:4517)、  
-プロジェクトサーバーは[http://localhost:4513](http://localhost:4513)、  
-リソースサーバーは[http://localhost:4514](http://localhost:4514)、  
-アセットサーバーは[http://localhost:4518](http://localhost:4518)で動きます。
