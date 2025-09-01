@@ -9,7 +9,7 @@ import { createExpire } from "../../../utils/secret";
 export const accountsLoginRoutes = (app: ElysiaApp) =>
   app.use(verifyCSRF()).post(
     "/login/",
-    async ({ jwt, cookie: { scratchsessionid }, body: { username, password } }) => {
+    async ({ jwt, cookie: { sessionid }, body: { username, password } }) => {
       const loginResult = await login(username, password);
 
       switch (loginResult.type) {
@@ -30,7 +30,7 @@ export const accountsLoginRoutes = (app: ElysiaApp) =>
             aud: loginResult.info.name,
             ...createExpire(14 * 24 * 60 * 60),
           });
-          scratchsessionid.value = token;
+          sessionid.value = token;
           return [
             {
               id: loginResult.info.id,

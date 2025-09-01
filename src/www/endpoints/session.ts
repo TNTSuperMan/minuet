@@ -62,7 +62,7 @@ const no_signin_response: typeof responseSchema.static = {
 export const sessionRoutes = (app: ElysiaApp) =>
   app.get(
     "/session/",
-    ({ user, cookie: { scratchsessionid } }) => {
+    ({ user, cookie: { sessionid } }) => {
       if (!user) return no_signin_response;
 
       const response: typeof responseSchema.static = {
@@ -100,7 +100,7 @@ export const sessionRoutes = (app: ElysiaApp) =>
           id: user.id,
           should_vpn: false,
           thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
-          token: scratchsessionid.value!,
+          token: sessionid.value!,
           username: user.name,
         },
       };

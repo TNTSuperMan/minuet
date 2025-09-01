@@ -65,13 +65,13 @@ export const getUserWithID = async (id: number): Promise<DBUser | null> => {
 };
 
 export const deriveSigninedUser = async ({
-  cookie,
+  cookie: { sessionid },
   headers,
   jwt,
 }: ElysiaContext): Promise<{
   user?: DBUser | null;
 }> => {
-  const key = cookie["scratchsessionid"].value ?? headers["X-Token"];
+  const key = sessionid.value ?? headers["X-Token"];
   if (!key) return {};
 
   const payload = await jwt.verify(key);
