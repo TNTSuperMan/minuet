@@ -1,6 +1,7 @@
 import cors from "@elysiajs/cors";
 import jwt from "@elysiajs/jwt";
 import swagger from "@elysiajs/swagger";
+import { env } from "bun";
 import Elysia, { InferContext } from "elysia";
 
 import { key } from "./secret";
@@ -24,7 +25,7 @@ const createElysiaAppWithoutDerives = (name: string) =>
     .use(jwt({ name: "jwt", secret: key, alg: "HS256" }))
     .use(
       cors({
-        origin: "http://localhost:4517",
+        origin: (env.ORIGINS ?? "").split(","),
         allowedHeaders: [
           "X-Custom-Header",
           "Upgrade-Insecure-Requests",
