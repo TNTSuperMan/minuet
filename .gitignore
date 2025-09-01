@@ -1,5 +1,6 @@
 .tsbuildinfo
 minuet-www
 dist
+.env
 # deps
 node_modules
