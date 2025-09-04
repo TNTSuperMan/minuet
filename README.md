@@ -28,7 +28,7 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 |API_PORT|4519|APIサーバーのポート番号|
 |WWW_PORT|4517|WWWサーバーのポート番号|
 |PROJECT_PORT|4513|プロジェクトサーバーのポート番号|
-|RES_PORT|4514|リソースサーバーのポート番号|
+|STATIC_PORT|4514|アップロードサーバーのポート番号|
 |ASSET_PORT|4518|アセットサーバーのポート番号|
 |HOST|http://localhost|フロントエンドがアクセスするサーバーのURL|
 |ORIGINS||CORSのオリジン(カンマ区切り)|
