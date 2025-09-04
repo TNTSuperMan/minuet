@@ -1,6 +1,6 @@
 import { createElysiaApp } from "../utils/app";
 
-const app = createElysiaApp("Project API").onError(({ code, set, error }) => {
+const app = createElysiaApp("Projects API").onError(({ code, set, error }) => {
   switch (code) {
     case "NOT_FOUND":
       set.status = 404;
