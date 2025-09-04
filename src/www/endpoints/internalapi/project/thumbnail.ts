@@ -1,7 +1,7 @@
+import { sql } from "bun";
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../../utils/app";
-import { sql } from "../../../../utils/db";
 import { getProject } from "../../../../utils/project";
 
 export const useThumbnailPlugin = (app: ElysiaApp) =>

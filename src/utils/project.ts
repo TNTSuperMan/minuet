@@ -1,4 +1,4 @@
-import { sql } from "./db";
+import { sql } from "bun";
 
 export interface DBProject {
   id: number;

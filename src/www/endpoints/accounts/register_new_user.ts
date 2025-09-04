@@ -1,10 +1,9 @@
-import { password } from "bun";
+import { password, sql } from "bun";
 import { t } from "elysia";
 
 import { isValidPassword } from "../../../api/endpoints/accounts/checkpassword";
 import { validateUsername } from "../../../api/endpoints/accounts/checkusername";
 import { ElysiaApp } from "../../../utils/app";
-import { sql } from "../../../utils/db";
 import { createExpire } from "../../../utils/secret";
 
 const formdataSchema = t.Object({

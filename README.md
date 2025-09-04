@@ -32,7 +32,7 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 |ASSET_PORT|4518|アセットサーバーのポート番号|
 |HOST|http://localhost|フロントエンドがアクセスするサーバーのURL|
 |ORIGINS||CORSのオリジン(カンマ区切り)|
-|DB|sqlite://./db.db|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
+|DATABASE_URL|知らん|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
 
 ## 導入
 - ないのであれば[bun](https://bun.sh/)をインストール

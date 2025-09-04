@@ -1,6 +1,6 @@
+import { sql } from "bun";
 import { t } from "elysia";
 
-import { sql } from "../../utils/db";
 import app from "../app";
 
 import "./get";

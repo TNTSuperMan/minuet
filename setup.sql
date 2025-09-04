@@ -1,17 +1,13 @@
-import { SQL } from "bun";
-
-export const sql = new SQL(process.env.DB ?? `sqlite://./db.db`);
-
-await sql`CREATE TABLE IF NOT EXISTS news (
+CREATE TABLE IF NOT EXISTS news (
   id INTEGER PRIMARY KEY,
   stamp    TEXT NOT NULL,
   headline TEXT NOT NULL,
   url      TEXT NOT NULL,
   image    TEXT NOT NULL,
   copy     TEXT NOT NULL
-)`;
+);
 
-await sql`CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE COLLATE NOCASE NOT NULL,
   birth_month INTEGER NOT NULL,
@@ -25,9 +21,9 @@ await sql`CREATE TABLE IF NOT EXISTS users (
   bio      TEXT NOT NULL,
   country  TEXT NOT NULL,
   icon     BLOB
-)`;
+);
 
-await sql`CREATE TABLE IF NOT EXISTS projects (
+CREATE TABLE IF NOT EXISTS projects (
   id INTEGER PRIMARY KEY,
   author INTEGER NOT NULL,
 
@@ -45,10 +41,10 @@ await sql`CREATE TABLE IF NOT EXISTS projects (
   parent INTEGER,
 
   json TEXT NOT NULL
-)`;
+);
 
-await sql`CREATE TABLE IF NOT EXISTS assets (
+CREATE TABLE IF NOT EXISTS assets (
   hash BLOB PRIMARY KEY,
   type TEXT NOT NULL,
   content BLOB NOT NULL
-)`;
+);

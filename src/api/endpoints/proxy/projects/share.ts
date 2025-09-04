@@ -1,8 +1,8 @@
+import { sql } from "bun";
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../../utils/app";
 import { verifyCSRF } from "../../../../utils/csrf";
-import { sql } from "../../../../utils/db";
 import { getProject } from "../../../../utils/project";
 
 export const proxyShareProjectRoutes = (app: ElysiaApp) =>

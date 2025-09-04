@@ -1,7 +1,7 @@
+import { sql } from "bun";
 import { t } from "elysia";
 
 import { ElysiaContext } from "./app";
-import { sql } from "./db";
 
 export const imagesSchema = t.Object(
   {

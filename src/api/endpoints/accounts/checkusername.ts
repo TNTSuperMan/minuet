@@ -1,7 +1,7 @@
+import { sql } from "bun";
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../../utils/app";
-import { sql } from "../../../utils/db";
 
 const username_regex = /^[\da-zA-Z-_]{3,20}$/;
 const bad_regex = /(google|ggr|goog|gtm|youtube|gemini)/;

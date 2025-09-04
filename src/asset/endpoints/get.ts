@@ -1,6 +1,6 @@
+import { sql } from "bun";
 import { NotFoundError, t } from "elysia";
 
-import { sql } from "../../utils/db";
 import app from "../app";
 
 import { path_reg } from "./post";
