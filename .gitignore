@@ -1,5 +1,4 @@
 .tsbuildinfo
-minuet-www
 dist
 .env
 db.db

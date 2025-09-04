@@ -1,0 +1,3 @@
+[submodule "minuet-www"]
+	path = minuet-www
+	url = https://github.com/TNTSuperMan/minuet-www
