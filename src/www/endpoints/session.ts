@@ -99,7 +99,7 @@ export const sessionRoutes = (app: ElysiaApp) =>
           gender: user.gender,
           id: user.id,
           should_vpn: false,
-          thumbnailUrl: `http://localhost:4514/user/${user.id}/32/`,
+          thumbnailUrl: `http://localhost:4514/get_image/user/${user.id}_32x32.png`,
           token: sessionid.value!,
           username: user.name,
         },
