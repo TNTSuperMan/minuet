@@ -7,10 +7,14 @@ import app from "../app";
 
 const sample_icon = await file("./src/utils/sample.png").bytes();
 
+const reg = /^(\d+)_(\d+)x\d+\.png$/;
+
 app.get(
-  "/user/:id/:width",
-  async ({ params, set }) => {
-    const { id, width } = params;
+  "/get_image/user/:path",
+  async ({ params: { path }, set }) => {
+    const res = reg.exec(path);
+    if(!res) throw new NotFoundError();
+    const [, id, width] = res;
 
     const user = await getUserWithID(parseInt(id));
     if (!user) throw new NotFoundError();
@@ -23,8 +27,7 @@ app.get(
   },
   {
     params: t.Object({
-      id: t.String({ pattern: "^[0-9]+$" }),
-      width: t.String({ pattern: "^[0-9]+$" }),
+      path: t.String({ pattern: "^(\\d+)_(\\d+)x\\d+\\.png$" }),
     }),
     detail: {
       summary: "ユーザーアイコンを取得します",

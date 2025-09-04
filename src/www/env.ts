@@ -20,7 +20,7 @@ app.get("/env.js", ({ set }) => {
             BACKPACK_HOST: `http://example.com`,
             CLOUDDATA_HOST: `http://example.com`,
             PROJECT_HOST: createHostOrigin(host, process.env.PROJECT_PORT || '4513'),
-            STATIC_HOST: `http://example.com`,
+            STATIC_HOST: createHostOrigin(host, process.env.STATIC_PORT || '4514'),
 
             ONBOARDING_TEST_PROJECT_IDS: JSON.stringify({
                clicker: '1',
