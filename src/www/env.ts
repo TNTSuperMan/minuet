@@ -15,8 +15,8 @@ app.get("/env.js", ({ set }) => {
             NODE_ENV: process.env.NODE_ENV || 'production',
             API_HOST: createHostOrigin(host, process.env.API_PORT || '4519'),
             ROOT_URL: createHostOrigin(host, process.env.WWW_PORT || '4517'),
-            ASSET_HOST: createHostOrigin(host, process.env.AST_PORT || '4518'),
-            PROJECT_HOST: createHostOrigin(host, process.env.PRJ_PORT || '4513'),
+            ASSET_HOST: createHostOrigin(host, process.env.ASSET_PORT || '4518'),
+            PROJECT_HOST: createHostOrigin(host, process.env.PROJECT_PORT || '4513'),
         }
     })}`;
 })
