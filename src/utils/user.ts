@@ -15,11 +15,11 @@ export const imagesSchema = t.Object(
 );
 
 export const getImages = (id: number): typeof imagesSchema.static => ({
-  "90x90": `http://localhost:4514/user/${id}/90/`,
-  "60x60": `http://localhost:4514/user/${id}/60/`,
-  "55x55": `http://localhost:4514/user/${id}/55/`,
-  "50x50": `http://localhost:4514/user/${id}/50/`,
-  "32x32": `http://localhost:4514/user/${id}/32/`,
+  "90x90": `http://localhost:4514/get_image/user/${id}_90x90.png`,
+  "60x60": `http://localhost:4514/get_image/user/${id}_60x60.png`,
+  "55x55": `http://localhost:4514/get_image/user/${id}_55x55.png`,
+  "50x50": `http://localhost:4514/get_image/user/${id}_50x50.png`,
+  "32x32": `http://localhost:4514/get_image/user/${id}_32x32.png`,
 });
 
 export interface DBUser {
