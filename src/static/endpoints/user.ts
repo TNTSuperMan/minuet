@@ -7,21 +7,21 @@ import app from "../app";
 
 const sample_icon = await file("./src/utils/sample.png").bytes();
 
-const reg = /^(\d+)_(\d+)x\d+\.png$/;
+const reg = /^(\d+)_(\d+)x(\d+)\.png$/;
 
 app.get(
   "/get_image/user/:path",
   async ({ params: { path }, set }) => {
     const res = reg.exec(path);
     if (!res) throw new NotFoundError();
-    const [, id, width] = res;
+    const [, id, width, height] = res;
 
     const user = await getUserWithID(parseInt(id));
     if (!user) throw new NotFoundError();
 
     set.headers["content-type"] = "image/png";
     return await sharp(user.icon ?? sample_icon)
-      .resize(parseInt(width))
+      .resize(Math.min(parseInt(width), 1024), Math.min(parseInt(height), 1024))
       .toFormat("png")
       .toBuffer();
   },
