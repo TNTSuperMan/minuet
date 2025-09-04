@@ -30,6 +30,7 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 |PRJ_PORT|4513|プロジェクトサーバーのポート番号|
 |RES_PORT|4514|リソースサーバーのポート番号|
 |AST_PORT|4518|アセットサーバーのポート番号|
+|HOST|http://localhost|フロントエンドがアクセスするサーバーのURL|
 |ORIGINS||CORSのオリジン(カンマ区切り)|
 |DB|sqlite://./db.db|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
 
