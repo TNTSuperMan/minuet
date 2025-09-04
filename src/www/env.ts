@@ -15,8 +15,21 @@ app.get("/env.js", ({ set }) => {
             NODE_ENV: process.env.NODE_ENV || 'production',
             API_HOST: createHostOrigin(host, process.env.API_PORT || '4519'),
             ROOT_URL: createHostOrigin(host, process.env.WWW_PORT || '4517'),
+            RECAPTCHA_SITE_KEY: ``,
             ASSET_HOST: createHostOrigin(host, process.env.ASSET_PORT || '4518'),
+            BACKPACK_HOST: `http://example.com`,
+            CLOUDDATA_HOST: `http://example.com`,
             PROJECT_HOST: createHostOrigin(host, process.env.PROJECT_PORT || '4513'),
+            STATIC_HOST: `http://example.com`,
+
+            ONBOARDING_TEST_PROJECT_IDS: JSON.stringify({
+               clicker: '1',
+               pong: '1',
+               animateCharacter: '1',
+               makeItFly: '1',
+               recordSound: '1',
+               makeMusic: '1',
+            }),
         }
     })}`;
 })
