@@ -2,7 +2,7 @@ import { SQL } from "bun";
 
 export const sql = new SQL(process.env.DB ?? `sqlite://./db.db`);
 
-sql`CREATE TABLE IF NOT EXISTS news (
+await sql`CREATE TABLE IF NOT EXISTS news (
   id INTEGER PRIMARY KEY,
   stamp    TEXT NOT NULL,
   headline TEXT NOT NULL,
@@ -11,7 +11,7 @@ sql`CREATE TABLE IF NOT EXISTS news (
   copy     TEXT NOT NULL
 )`;
 
-sql`CREATE TABLE IF NOT EXISTS users (
+await sql`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   name TEXT UNIQUE COLLATE NOCASE NOT NULL,
   birth_month INTEGER NOT NULL,
@@ -27,7 +27,7 @@ sql`CREATE TABLE IF NOT EXISTS users (
   icon     BLOB
 )`;
 
-sql`CREATE TABLE IF NOT EXISTS projects (
+await sql`CREATE TABLE IF NOT EXISTS projects (
   id INTEGER PRIMARY KEY,
   author INTEGER NOT NULL,
 
@@ -47,7 +47,7 @@ sql`CREATE TABLE IF NOT EXISTS projects (
   json TEXT NOT NULL
 )`;
 
-sql`CREATE TABLE IF NOT EXISTS assets (
+await sql`CREATE TABLE IF NOT EXISTS assets (
   hash BLOB PRIMARY KEY,
   type TEXT NOT NULL,
   content BLOB NOT NULL
