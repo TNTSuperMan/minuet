@@ -13,7 +13,7 @@ app.get(
   "/get_image/user/:path",
   async ({ params: { path }, set }) => {
     const res = reg.exec(path);
-    if(!res) throw new NotFoundError();
+    if (!res) throw new NotFoundError();
     const [, id, width] = res;
 
     const user = await getUserWithID(parseInt(id));
