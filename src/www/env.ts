@@ -1,4 +1,4 @@
-import app from "../api";
+import app from "./app";
 
 const createHostOrigin = (host: URL | string, port: string) => {
     const url = new URL("", host);
