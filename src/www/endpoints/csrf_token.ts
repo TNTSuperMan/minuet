@@ -2,14 +2,13 @@ import { CSRF } from "bun";
 import { t } from "elysia";
 
 import { ElysiaApp } from "../../utils/app";
-
-export const csrfTokenExpire = 365 * 24 * 60 * 60;
+import { csrfSecret, csrfTokenExpire } from "../../utils/csrf";
 
 export const csrfTokenRoutes = (app: ElysiaApp) =>
   app.get(
     "/csrf_token/",
     async ({ cookie: { csrftoken } }) => {
-      csrftoken.value = await CSRF.generate(undefined, {
+      csrftoken.value = await CSRF.generate(csrfSecret, {
         expiresIn: csrfTokenExpire,
       });
       return "";

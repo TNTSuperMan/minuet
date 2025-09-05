@@ -6,7 +6,7 @@ import { verifyCSRF } from "../../../../utils/csrf";
 import { getProject } from "../../../../utils/project";
 
 export const proxyShareProjectRoutes = (app: ElysiaApp) =>
-  app.use(verifyCSRF()).put(
+  app.onBeforeHandle(verifyCSRF).put(
     "/proxy/projects/:id/share",
     async ({ params: { id }, user, set }) => {
       const proj = await getProject(parseInt(id));

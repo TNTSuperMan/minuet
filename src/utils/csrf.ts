@@ -1,16 +1,17 @@
 import { CSRF } from "bun";
-import Elysia from "elysia";
+import { Context } from "elysia";
 
-import { csrfTokenExpire } from "../www/endpoints/csrf_token";
+export const csrfTokenExpire = 365 * 24 * 60 * 60;
+export const csrfSecret = crypto.getRandomValues(Buffer.alloc(256)).toBase64();
 
-export const verifyCSRF = () =>
-  new Elysia().onBeforeHandle(({ cookie: { csrftoken }, headers }) => {
-    if (
-      !CSRF.verify(headers["x-csrftoken"] ?? "", {
-        maxAge: csrfTokenExpire,
-      })
-    ) {
-      csrftoken.remove();
-      return new Response(null, { status: 403, statusText: "Forbidden" });
-    }
-  });
+export const verifyCSRF = ({ cookie: { csrftoken }, headers }: Context) => {
+  if (
+    !CSRF.verify(headers["x-csrftoken"] ?? "", {
+      secret: csrfSecret,
+      maxAge: csrfTokenExpire,
+    })
+  ) {
+    csrftoken.remove();
+    return new Response(null, { status: 403, statusText: "Forbidden" });
+  }
+};
