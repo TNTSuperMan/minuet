@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "replicat",
+      "name": "minuet",
       "dependencies": {
         "@elysiajs/cors": "^1.3.3",
         "@elysiajs/jwt": "^1.3.1",
