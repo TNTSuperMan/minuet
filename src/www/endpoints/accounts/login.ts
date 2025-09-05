@@ -7,7 +7,7 @@ import { login } from "../../../utils/login";
 import { createExpire } from "../../../utils/secret";
 
 export const accountsLoginRoutes = (app: ElysiaApp) =>
-  app.use(verifyCSRF()).post(
+  app.onBeforeHandle(verifyCSRF).post(
     "/login/",
     async ({ jwt, cookie: { sessionid }, body: { username, password } }) => {
       const loginResult = await login(username, password);
