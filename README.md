@@ -33,6 +33,8 @@ Scratchを基に、プログラミングコミュニティーのプログラム�
 |HOST|http://localhost|フロントエンドがアクセスするサーバーのURL|
 |ORIGINS||CORSのオリジン(カンマ区切り)|
 |DATABASE_URL|知らん|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
+|JWT_KEY_PATH|メモリ内で生成されます|セッション管理に使われる鍵のファイルパス|
+|CSRF_SECRET|メモリ内で生成されます|CSRFトークンの生成・検証に使う文字列の秘密鍵|
 
 ## 導入
 - ないのであれば[bun](https://bun.sh/)をインストール
