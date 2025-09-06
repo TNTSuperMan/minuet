@@ -13,20 +13,24 @@ export const isValidEmail = (email: string) => {
 export const checkEmailRoutes = (app: ElysiaApp) =>
   app.get(
     "/check_email/",
-    ({ query: { email } }) => ({
-      msg: isValidEmail(email)
-        ? "valid email"
-        : "このアドレスにメールを送ることが許可されていません。",
-      email,
-    }),
+    ({ query: { email } }) => [
+      {
+        msg: isValidEmail(email)
+          ? "valid email"
+          : "このアドレスにメールを送ることが許可されていません。",
+        email,
+      },
+    ],
     {
       detail: { summary: "有効なメールアドレスかを返します" },
       query: t.Object({
         email: t.String({ format: "email" }),
       }),
-      response: t.Object({
-        msg: t.String(),
-        email: t.String({ format: "email" }),
-      }),
+      response: t.Tuple([
+        t.Object({
+          msg: t.String(),
+          email: t.String({ format: "email" }),
+        }),
+      ]),
     }
   );
