@@ -8,12 +8,13 @@ import { getProject } from "../../../../utils/project";
 export const proxyShareProjectRoutes = (app: ElysiaApp) =>
   app.onBeforeHandle(verifyCSRF).put(
     "/proxy/projects/:id/share",
-    async ({ params: { id }, user, set }) => {
+    async ({ params: { id }, user, status }) => {
       const proj = await getProject(parseInt(id));
-
-      if (!proj || !user || proj.author !== user.id) {
-        set.status = 403;
-        return "403 Forbidden";
+      if (!user) {
+        return status(401, "401 Unauthorized");
+      }
+      if (!proj || proj.author !== user.id) {
+        return status(403, "403 Forbidden");
       }
 
       await sql`"UPDATE projects SET public = 1 WHERE id = ${proj.id}`;
@@ -35,7 +36,8 @@ export const proxyShareProjectRoutes = (app: ElysiaApp) =>
             t.Literal("false", { description: "公開されていない" }),
           ]),
         }),
-        403: t.String({ description: "403である旨" }),
+        401: t.Literal("401 Unauthorized", { description: "ログインしていない場合のメッセージ" }),
+        403: t.Literal("403 Forbidden", { description: "権限が無い場合のメッセージ" }),
       },
     }
   );

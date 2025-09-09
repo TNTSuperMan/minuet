@@ -1,14 +1,12 @@
 import { createElysiaApp } from "../utils/app";
 
-const app = createElysiaApp("Uploads").onError(({ code, set, error }) => {
+const app = createElysiaApp("Uploads").onError(({ code, status, error }) => {
   switch (code) {
     case "NOT_FOUND":
-      set.status = 404;
-      return "404 Not Found";
+      return status(404, "404 Not Found");
     case "INTERNAL_SERVER_ERROR":
       console.error(error);
-      set.status = 500;
-      return "500 Internal Server Error";
+      return status(500, "500 Internal Server Error");
   }
 });
 

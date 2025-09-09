@@ -6,12 +6,13 @@ import app from "../app";
 
 app.put(
   "/:id",
-  async ({ user, body, set, params: { id } }) => {
+  async ({ user, body, status, params: { id } }) => {
     const proj = await getProject(parseInt(id));
-
+    if (!user) {
+      return status(401, "401 Unauthorized");
+    }
     if (!proj || !user || proj.author !== user.id) {
-      set.status = 403;
-      return "";
+      return status(403, "403 Forbidden");
     }
 
     const body_json = await body.json();
@@ -34,7 +35,8 @@ app.put(
         status: t.String({ description: "結果" }),
         "autosave-interval": t.Literal("120"),
       }),
-      403: t.String(),
+      401: t.Literal("401 Unauthorized", { description: "ログインしていない場合のメッセージ" }),
+      403: t.Literal("403 Forbidden", { description: "権限が無い場合のメッセージ" }),
     },
   }
 );

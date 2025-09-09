@@ -8,10 +8,9 @@ import "./put";
 
 app.post(
   "/",
-  async ({ body, user, set }) => {
+  async ({ body, user, status }) => {
     if (!user) {
-      set.status = 403;
-      return "403 Forbidden";
+      return status(403, "403 Forbidden");
     }
 
     const title = `Untitled_${Date.now()}`;

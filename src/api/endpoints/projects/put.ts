@@ -10,11 +10,13 @@ import { getProjectData, projectDataSchema } from "./_util";
 export const putProjectRoutes = (app: ElysiaApp) =>
   app.put(
     "/:id",
-    async ({ user, set, body, params: { id }, jwt }) => {
+    async ({ user, status, body, params: { id }, jwt }) => {
       const proj = await getProject(parseInt(id));
-      if (!proj || !user || proj.author !== user.id) {
-        set.status = 403;
-        return "403 Forbidden";
+      if (!user) {
+        return status(401, "401 Unauthorized");
+      }
+      if (!proj || proj.author !== user.id) {
+        return status(403, "403 Forbidden");
       }
 
       await sql`UPDATE projects SET title = ${body.title ?? proj.title}, description = ${
@@ -42,8 +44,9 @@ export const putProjectRoutes = (app: ElysiaApp) =>
         instructions: t.Optional(t.String({ description: "使い方" })),
       }),
       response: {
-        403: t.String({ description: "403の旨" }),
         200: projectDataSchema,
+        401: t.Literal("401 Unauthorized", { description: "ログインしていない場合のメッセージ" }),
+        403: t.Literal("403 Forbidden", { description: "権限が無い場合のメッセージ" }),
       },
     }
   );

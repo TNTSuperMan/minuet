@@ -20,15 +20,13 @@ const formdataSchema = t.Object({
 export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
   app.post(
     "/accounts/register_new_user/",
-    async ({ jwt, body, set }) => {
+    async ({ jwt, body, status }) => {
       const usr_validate_res = await validateUsername(body.username);
       if (usr_validate_res !== "valid username") {
-        set.status = 400;
-        return [{ msg: "invalid username" }];
+        return status(400, [{ msg: "invalid username" }]);
       }
       if (!isValidPassword(body.password)) {
-        set.status = 400;
-        return [{ msg: "invalid password" }];
+        return status(400, [{ msg: "invalid password" }]);
       }
 
       const dbRes = (await sql`INSERT INTO users (
@@ -54,22 +52,24 @@ export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
     {
       detail: { summary: "ユーザーを登録します" },
       body: formdataSchema,
-      response: t.Tuple([
-        t.Union([
+      response: {
+        200: t.Tuple([
           t.Object({
             username: t.String({ description: "登録したユーザー名" }),
             user_id: t.Number({ description: "割り当てられたユーザーID" }),
             success: t.Boolean({ description: "成功したか" }),
             token: t.Optional(t.String({ description: "アクセストークン" })),
-            msg: t.String({ description: 'メッセージ(正常の場合"user created")' }),
+            msg: t.Literal("user created"),
             logged_in: t.Boolean({
               description: "そのユーザーにログインしたか(wwwで使われてない気がする)",
             }),
           }),
+        ]),
+        400: t.Tuple([
           t.Object({
-            msg: t.String({ description: 'メッセージ(正常の場合"user created")' }),
+            msg: t.Union([t.Literal("invalid username"), t.Literal("invalid password")]),
           }),
         ]),
-      ]),
+      },
     }
   );

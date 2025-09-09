@@ -7,12 +7,11 @@ import { getProject } from "../../../../utils/project";
 export const useThumbnailPlugin = (app: ElysiaApp) =>
   app.post(
     "/thumbnail/:id/set/",
-    async ({ params: { id }, body, user, set }) => {
+    async ({ params: { id }, body, user, status }) => {
       const proj = await getProject(parseInt(id));
 
       if (!proj || !user || proj.author !== user.id) {
-        set.status = 403;
-        return "403 Forbidden";
+        return status(403, "403 Forbidden");
       }
 
       const body_bytes = await body.bytes();

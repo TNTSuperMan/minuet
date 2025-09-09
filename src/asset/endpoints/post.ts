@@ -16,18 +16,16 @@ const extensionMap: {
 
 app.post(
   "/:name",
-  async ({ user, params, set, body }) => {
+  async ({ user, params, status, body }) => {
     if (!user) {
-      set.status = 403;
-      return "403 Forbidden";
+      return status(401, "401 Unauthorized");
     }
     const { name } = params;
     const [, hash, ext] = path_reg.exec(name)!;
 
     const mime = extensionMap[ext];
     if (!mime) {
-      set.status = 400;
-      return "400 Bad Request";
+      return status(400, "400 Bad Request");
     }
 
     const hashbin = new Uint8Array(Buffer.from(hash, "hex"));
@@ -47,12 +45,18 @@ app.post(
       name: t.String({ pattern: path_reg.source }),
     }),
     body: t.File(),
-    response: t.Union([
-      t.Object({
-        "content-name": t.String({ description: "リソース名" }),
-        status: t.String({ description: "結果(成功した場合ok)" }),
+    response: {
+      200: t.Union([
+        t.Object({
+          "content-name": t.String({ description: "リソース名" }),
+          status: t.String({ description: "結果(成功した場合ok)" }),
+        }),
+        t.String(),
+      ]),
+      400: t.Literal("400 Bad Request", { description: "MIMEタイプが不正な場合のメッセージです" }),
+      401: t.Literal("401 Unauthorized", {
+        description: "ログインされていない場合のメッセージです",
       }),
-      t.String(),
-    ]),
+    },
   }
 );

@@ -8,32 +8,27 @@ import { UserProjectsElysiaApp } from ".";
 export const userProjectsVisibilityRoutes = (app: UserProjectsElysiaApp) =>
   app.get(
     "/visivility",
-    async ({ user, params: { usr, id }, set }) => {
+    async ({ user, params: { usr, id }, status }) => {
       const param_user = await getUser(usr);
       if (!param_user) {
-        set.status = 403;
-        return "";
+        return status(403, "");
       }
 
       const proj = await getProject(parseInt(id));
       if (!proj) {
-        set.status = 403;
-        return "";
+        return status(403, "");
       }
 
       if (param_user.id !== proj.author) {
-        set.status = 403;
-        return "";
+        return status(403, "");
       }
 
       if (!user) {
-        set.status = 403;
-        return "";
+        return status(403, "");
       }
 
       if (user.id !== param_user.id) {
-        set.status = 403;
-        return "";
+        return status(403, "");
       }
 
       // TODO: 報告機能が出来たら進める
