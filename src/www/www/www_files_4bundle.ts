@@ -1,5 +1,4 @@
-import { readdirSync } from "fs";
-import { readFile, stat } from "fs/promises";
+import { readdir, readFile, stat } from "fs/promises";
 import { resolve } from "path";
 
 import { file } from "bun";
@@ -8,7 +7,7 @@ export const get_files = async (): Promise<{ [key: string]: [string, string] }> 
   Object.fromEntries(
     (
       await Promise.all(
-        readdirSync("minuet-www/build", { recursive: true, encoding: "ascii" }).map(
+        (await readdir("minuet-www/build", { recursive: true, encoding: "ascii" })).map(
           async (e): Promise<[string, [string, string]] | null> => {
             const path = resolve("minuet-www/build", e);
             const s = await stat(path);
