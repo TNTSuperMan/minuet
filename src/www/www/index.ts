@@ -1,7 +1,7 @@
 import { NotFoundError } from "elysia";
 
 import routes from "../../../minuet-www/src/routes.json" with { type: "json" };
-import { ElysiaApp } from "../../utils/app";
+import app from "../app";
 
 const { default: files } = await (process.env.NODE_ENV === "production"
   ? import("./www_prod")
@@ -15,13 +15,12 @@ const routesMap = routes.map(
     ] as const
 );
 
-export const WWWPageRoutes = (app: ElysiaApp) =>
-  app.all("*", async ({ path }) => {
-    const p = path.substring(1);
-    if (p in files) return await files[p]!;
-    else {
-      const route = routesMap.find((e) => e[0].test(path));
-      if (!route) throw new NotFoundError();
-      else return await files[route[1]]!;
-    }
-  });
+app.all("*", async ({ path }) => {
+  const p = path.substring(1);
+  if (p in files) return await files[p]!;
+  else {
+    const route = routesMap.find((e) => e[0].test(path));
+    if (!route) throw new NotFoundError();
+    else return await files[route[1]]!;
+  }
+});
