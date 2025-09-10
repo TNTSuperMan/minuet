@@ -1,3 +1,5 @@
+import { zstdDecompress } from "bun";
+
 import { get_files } from "./www_files_4bundle" with { type: "macro" };
 
 const files = await get_files();
@@ -14,7 +16,7 @@ export default new Proxy<{
     async get(_, p: string) {
       if (p in cache) return cache[p] ?? undefined;
       else if (p in files)
-        return (cache[p] = new Blob([Buffer.from(files[p][1], "base64")], { type: files[p][0] }));
+        return (cache[p] = new Blob([await zstdDecompress(Buffer.from(files[p][1], "base64"))], { type: files[p][0] }));
       else {
         cache[p] = null;
         return undefined;
