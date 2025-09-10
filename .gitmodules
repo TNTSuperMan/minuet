@@ -1,3 +1,6 @@
 [submodule "minuet-www"]
 	path = minuet-www
 	url = https://github.com/TNTSuperMan/minuet-www
+[submodule "minuet-editor"]
+	path = minuet-editor
+	url = https://github.com/TNTSuperMan/minuet-editor
