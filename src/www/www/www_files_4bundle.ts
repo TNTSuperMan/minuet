@@ -1,6 +1,6 @@
 import { relative } from "path";
 
-import { file, Glob, zstdCompress } from "bun";
+import { file, Glob, zstdCompressSync } from "bun";
 
 export const get_files = async (): Promise<{ [key: string]: [string, string] }> =>
   Object.fromEntries(
@@ -12,7 +12,8 @@ export const get_files = async (): Promise<{ [key: string]: [string, string] }> 
             const f = file(path);
             const buf = await f.bytes().catch(() => null);
             if (buf === null) return null;
-            return [name, [f.type, (await zstdCompress(buf, { level: 22 })).toBase64()]];
+            // TODO: Bun.zstdCompressが安定したらそれに変える
+            return [name, [f.type, zstdCompressSync(buf, { level: 22 }).toBase64()]];
           }
         )
       )
