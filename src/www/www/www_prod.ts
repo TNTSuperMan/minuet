@@ -16,10 +16,7 @@ export default new Proxy<{
     async get(_, p: string) {
       if (p in cache) return cache[p] ?? undefined;
       else if (p in files)
-        if (typeof files[p][1] === "string")
-          return (cache[p] = new Blob([files[p][1]], { type: files[p][0] }))
-        else
-          return (cache[p] = new Blob([await zstdDecompress(Buffer.from(files[p][1][0], "base64"))], { type: files[p][0] }));
+        return (cache[p] = new Blob([await zstdDecompress(Buffer.from(files[p][1], "base64"))], { type: files[p][0] }));
       else {
         cache[p] = null;
         return undefined;
