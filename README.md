@@ -15,6 +15,18 @@
 Scratchを基に、プログラミングコミュニティーのプログラムを作ってます。
 多分オフラインでも動きます。
 
+## クレジット
+本プロジェクトでは、[scratch-www](https://github.com/scratchfoundation/scratch-www)と[scratch-editor](https://github.com/scratchfoundation/scratch-editor/blob/develop/package.json)のフォークが使われています。それぞれのクレジットのリンクは以下です。
+
+https://github.com/TNTSuperMan/minuet-www?tab=readme-ov-file#%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88
+
+https://github.com/TNTSuperMan/minuet-editor?tab=readme-ov-file#%E3%82%AF%E3%83%AC%E3%82%B8%E3%83%83%E3%83%88
+
+また、minuet自体のAPI設計においても[scratch-www](https://github.com/scratchfoundation/scratch-www)を参考にしています。  
+[scratch-www](https://github.com/scratchfoundation/scratch-www)のライセンスの全文は、[こちら](https://github.com/scratchfoundation/scratch-www/blob/develop/LICENSE)をご参照ください。
+
+これら主に使わせていただいたプログラムの原作者であるScratch Foundation様などに感謝を示します。
+
 ## 環境
 |名目|名前|
 |-|-|
