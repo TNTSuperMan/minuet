@@ -32,7 +32,7 @@ https://github.com/TNTSuperMan/minuet-editor?tab=readme-ov-file#%E3%82%AF%E3%83%
 |-|-|
 |ランタイム|Bun|
 |フレームワーク|Elysia|
-|データベース|SQLite|
+|データベース|SQLite(or MySQL&PostgreSQL(未確認))|
 
 ## 環境変数
 .envなりコマンドラインなりで環境変数いじってね
