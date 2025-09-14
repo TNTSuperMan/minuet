@@ -30,6 +30,7 @@ app.get("/env.js", ({ set }) => {
         recordSound: "1",
         makeMusic: "1",
       }),
+      ONBOARDING_TEST_ACTIVE: "false",
     },
   })}`;
 });
