@@ -21,7 +21,10 @@ app.get("/env.js", ({ set }) => {
       CLOUDDATA_HOST: `http://example.com`,
       PROJECT_HOST: createHostOrigin(host, process.env.PROJECT_PORT || "4513"),
       STATIC_HOST: createHostOrigin(host, process.env.STATIC_PORT || "4514"),
-
+      THUMBNAIL_URI: "/internalapi/project/thumbnail/{}/set/",
+      THUMBNAIL_HOST: "",
+      DEBUG: process.env.NODE_ENV !== "production",
+      ONBOARDING_TEST_ACTIVE: "false",
       ONBOARDING_TEST_PROJECT_IDS: JSON.stringify({
         clicker: "1",
         pong: "1",
@@ -30,7 +33,18 @@ app.get("/env.js", ({ set }) => {
         recordSound: "1",
         makeMusic: "1",
       }),
-      ONBOARDING_TEST_ACTIVE: "false",
+      ONBOARDING_TESTING_STARTING_DATE: "2024-01-20",
+      ONBOARDING_TESTING_ENDING_DATE: "2030-11-20",
+      QUALITATIVE_FEEDBACK_ACTIVE: "false",
+      QUALITATIVE_FEEDBACK_STARTING_DATE: "2024-01-20",
+      QUALITATIVE_FEEDBACK_ENDING_DATE: "2024-11-20",
+      QUALITATIVE_FEEDBACK_IDEAS_GENERATOR_USER_FREQUENCY: "2",
+      QUALITATIVE_FEEDBACK_STARTER_PROJECTS_USER_FREQUENCY: "2",
+      QUALITATIVE_FEEDBACK_DEBUGGING_USER_FREQUENCY: "2",
+      QUALITATIVE_FEEDBACK_TUTORIALS_USER_FREQUENCY: "2",
+      IDEAS_GENERATOR_SOURCE: "https://example.com",
+      MANUALLY_SAVE_THUMBNAILS: "true"
+
     },
   })}`;
 });
