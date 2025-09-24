@@ -15,7 +15,7 @@ app.get("/env.js", ({ set }) => {
       NODE_ENV: process.env.NODE_ENV || "production",
       API_HOST: createHostOrigin(host, process.env.API_PORT || "4519"),
       ROOT_URL: createHostOrigin(host, process.env.WWW_PORT || "4517"),
-      RECAPTCHA_SITE_KEY: ``,
+      TURNSTILE_SITE_KEY: process.env.TURNSTILE_SITE_KEY,
       ASSET_HOST: createHostOrigin(host, process.env.ASSET_PORT || "4518"),
       BACKPACK_HOST: `http://example.com`,
       CLOUDDATA_HOST: `http://example.com`,

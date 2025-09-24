@@ -48,6 +48,7 @@ https://github.com/TNTSuperMan/minuet-editor?tab=readme-ov-file#%E3%82%AF%E3%83%
 |DATABASE_URL|知らん|データベースのURIスキーム(詳細は[Bunのドキュメント](https://bun.com/docs/api/sql)見て)|
 |JWT_KEY_PATH|毎回生成されます|セッション管理に使われる鍵のファイルパス|
 |CSRF_SECRET|毎回生成されます|CSRFトークンの生成・検証に使う文字列の秘密鍵|
+|TURNSTILE_SITE_KEY|Turnstile認証は行われません|Turnstile認証用のサイトキー|
 
 ## 導入
 - ないのであれば[bun](https://bun.sh/)をインストール
