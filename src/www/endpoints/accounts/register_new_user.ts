@@ -19,7 +19,7 @@ const formdataSchema = t.Object({
 
 export const accountsRegisterNewUserRoutes = (app: ElysiaApp) =>
   app.post(
-    "/accounts/register_new_user/",
+    "/register_new_user/",
     async ({ jwt, body, status }) => {
       const usr_validate_res = await validateUsername(body.username);
       if (usr_validate_res !== "valid username") {
