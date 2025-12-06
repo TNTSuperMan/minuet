@@ -15,6 +15,9 @@
 Scratchを基に、プログラミングコミュニティーのプログラムを作ってます。
 多分オフラインでも動きます。
 
+> 現在、minuetプロジェクトの開発の労力が増えており、一時的にプロジェクト関係のリポジトリをアーカイブしています。
+> もしminuetの開発を進めてほしければ、Issueか何かに書いていただければありがたいです。
+
 ## クレジット
 本プロジェクトでは、[scratch-www](https://github.com/scratchfoundation/scratch-www)と[scratch-editor](https://github.com/scratchfoundation/scratch-editor/blob/develop/package.json)のフォークが使われています。それぞれのクレジットのリンクは以下です。
 
